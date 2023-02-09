@@ -49,7 +49,7 @@ class BingoGenerator:
         match = PREFERRED_SIZE_RE.search(generator_js)
         self.preferred_size = int(match.group(1)) if match else 5
 
-    def validate_custom_json(self, custom_json):
+    def validate_custom_json(self, custom_json, size=5):
         return []
 
     def eval(self, js_command):

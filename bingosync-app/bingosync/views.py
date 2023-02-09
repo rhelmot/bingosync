@@ -145,7 +145,7 @@ def new_card(request):
     generator = game_type.generator_instance()
 
     try:
-        custom_board = generator.validate_custom_json(custom_json)
+        custom_board = generator.validate_custom_json(custom_json, size=size)
     except InvalidBoardException as e:
         return HttpResponseBadRequest("Invalid board: " + str(e))
 

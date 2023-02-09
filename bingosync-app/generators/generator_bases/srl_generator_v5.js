@@ -154,7 +154,7 @@ bingoGenerator = function(bingoList, opts) {
     }
     let difficulty;
     if (size === 5) {
-        difficulty = function(i) {
+        difficulty = function (i) {
 
             //This function takes a space on the board between 0 and 24, and returns its difficulty score, also between 0 and 24.
             //These should always form a magic square if seed remains the same
@@ -227,9 +227,9 @@ bingoGenerator = function(bingoList, opts) {
 
             //since every row/column has every value for groupOf5 and withinGroup once, the total for all of them will be the same.
             // 5 * (0,1,2,3,4) + (0,1,2,3,4)
-            // (0,5,10,15,20) + (0,1,2,3,4) = 60   (becomes 65 after 1-indexing)
+            // (0,5,10,15,20) + (0,1,2,3,4) = 60
         }
-    } else {
+    } else if (size === 7 || size === 11 || size === 13 || size === 17) {
         difficulty = function(i) {
             let seedMut = seed % seedCycle;
             let seedCycleMut = seedCycle;
@@ -301,6 +301,14 @@ bingoGenerator = function(bingoList, opts) {
                 throw new Error("Programming error");
             }
             return value;
+        }
+    } else {
+        const shuffled = [0];
+        for (let i = 1; i < size*size; i++) {
+            shuffled.splice(Math.floor(Math.random() * (i + 1)), 0, i);
+        }
+        difficulty = function (i) {
+            return shuffled[i];
         }
     }
 
