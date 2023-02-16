@@ -120,7 +120,8 @@ class CustomGenerator:
         self.game_type = game_type
 
     def validate_custom_json(self, custom_json, size=5):
-        size = int(size)
+        if size:
+            size = int(size)
         try:
             custom_board = json.loads(custom_json)
         except json.decoder.JSONDecodeError as e:
