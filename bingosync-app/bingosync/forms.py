@@ -121,7 +121,7 @@ class JoinRoomForm(forms.Form):
     creator_name = make_read_only_char_field(label="Creator", max_length=PLAYER_NAME_MAX_LENGTH)
     game_name = make_read_only_char_field(label="Game")
     player_name = forms.CharField(label="Nickname", max_length=PLAYER_NAME_MAX_LENGTH)
-    passphrase = forms.CharField(label="Password", widget=forms.PasswordInput())
+    passphrase = forms.CharField(label="Password", widget=forms.PasswordInput(render_value=True))
     is_spectator = forms.BooleanField(label="Join as Spectator", required=False)
 
     @staticmethod

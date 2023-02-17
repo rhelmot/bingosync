@@ -7,6 +7,7 @@ import datetime
 from uuid import uuid4
 from enum import Enum, unique
 import math
+import urllib.parse
 
 from bingosync.models.game_type import GameType
 from bingosync.models.colors import Color, CompositeColor
@@ -30,12 +31,15 @@ class Room(models.Model):
     def __repr__(self):
         return "<Room: id: {!r}, uuid: {!r}>".format(self.id, self.encoded_uuid)
 
-    def get_absolute_url(self):
+    def get_absolute_url(self, with_password=False):
         from bingosync.views import room_view
         kwargs = {
             "encoded_room_uuid": self.encoded_uuid
         }
-        return reverse(room_view, kwargs=kwargs)
+        result = reverse(room_view, kwargs=kwargs)
+        if with_password:
+            result += '?' + urllib.parse.urlencode({'password': self.passphrase})
+        return result
 
     @staticmethod
     def get_for_encoded_uuid(encoded_room_uuid):

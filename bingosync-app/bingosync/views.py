@@ -10,6 +10,7 @@ import json
 import requests
 import random
 import logging
+import urllib.parse
 
 from bingosync.settings import SOCKETS_URL, SOCKETS_PUBLISH_URL, IS_PROD
 from bingosync.generators import InvalidBoardException, GeneratorException
@@ -26,6 +27,13 @@ from crispy_forms.layout import Layout, Field
 
 logger = logging.getLogger(__name__)
 
+def redirect_params(url, params=None, **kwargs):
+    response = redirect(url, **kwargs)
+    if params:
+        query_string = urllib.parse.urlencode(params)
+        response['Location'] += '?' + query_string
+    return response
+
 def rooms(request):
     if request.method == "POST":
         form = RoomForm(request.POST)
@@ -34,7 +42,7 @@ def rooms(request):
                 room = form.create_room()
                 creator = room.creator
                 _save_session_player(request.session, creator)
-                return redirect("room_view", encoded_room_uuid=room.encoded_uuid)
+                return redirect_params("room_view", encoded_room_uuid=room.encoded_uuid, params={'password': form.cleaned_data['passphrase']})
             except GeneratorException as e:
                 form.add_error(None, str(e))
         else:
@@ -55,50 +63,52 @@ def rooms(request):
     return render(request, "bingosync/index.html", params)
 
 def room_view(request, encoded_room_uuid):
-    if request.method == "POST":
-        join_form = JoinRoomForm(request.POST)
-        if join_form.is_valid():
-            player = join_form.create_player()
-            _save_session_player(request.session, player)
-            return redirect("room_view", encoded_room_uuid=encoded_room_uuid)
+    room = Room.get_for_encoded_uuid_or_404(encoded_room_uuid)
+    try:
+        if request.method == "POST":
+            join_form = JoinRoomForm(request.POST)
+            if join_form.is_valid():
+                player = join_form.create_player()
+                _save_session_player(request.session, player)
+                return redirect_params("room_view", encoded_room_uuid=encoded_room_uuid, params={'password': join_form.cleaned_data['passphrase']})
+            else:
+                room = Room.get_for_encoded_uuid_or_404(encoded_room_uuid)
+                return _join_room(request, join_form, room)
         else:
-            room = Room.get_for_encoded_uuid_or_404(encoded_room_uuid)
-            return _join_room(request, join_form, room)
-    else:
-        try:
-            room = Room.get_for_encoded_uuid_or_404(encoded_room_uuid)
-            initial_values = {
-                "game_type": room.current_game.game_type.group.value,
-                "variant_type": room.current_game.game_type.value,
-                "lockout_mode": room.current_game.lockout_mode.value,
-                "hide_card": room.hide_card,
-                "size": room.current_game.size,
-            }
-            new_card_form = RoomForm(initial=initial_values)
-            new_card_form.helper.layout = Layout(
-                    "game_type",
-                    "variant_type",
-                    "custom_json",
-                    "lockout_mode",
-                    "seed",
-                    "size",
-                    "hide_card",
-            )
-            new_card_form.helper['variant_type'].wrap(Field, wrapper_class='hidden')
-            new_card_form.helper['custom_json'].wrap(Field, wrapper_class='hidden')
-            player = _get_session_player(request.session, room)
-            params = {
-                "room": room,
-                "game": room.current_game,
-                "player": player,
-                "sockets_url": SOCKETS_URL,
-                "new_card_form": new_card_form,
-                "temporary_socket_key": _create_temporary_socket_key(player)
-            }
-            return render(request, "bingosync/bingosync.html", params)
-        except NotAuthenticatedError:
-            join_form = JoinRoomForm.for_room(room)
-            return _join_room(request, join_form, room)
+                initial_values = {
+                    "game_type": room.current_game.game_type.group.value,
+                    "variant_type": room.current_game.game_type.value,
+                    "lockout_mode": room.current_game.lockout_mode.value,
+                    "hide_card": room.hide_card,
+                    "size": room.current_game.size,
+                }
+                new_card_form = RoomForm(initial=initial_values)
+                new_card_form.helper.layout = Layout(
+                        "game_type",
+                        "variant_type",
+                        "custom_json",
+                        "lockout_mode",
+                        "seed",
+                        "size",
+                        "hide_card",
+                )
+                new_card_form.helper['variant_type'].wrap(Field, wrapper_class='hidden')
+                new_card_form.helper['custom_json'].wrap(Field, wrapper_class='hidden')
+                player = _get_session_player(request.session, room)
+                params = {
+                    "room": room,
+                    "game": room.current_game,
+                    "player": player,
+                    "sockets_url": SOCKETS_URL,
+                    "new_card_form": new_card_form,
+                    "temporary_socket_key": _create_temporary_socket_key(player)
+                }
+                return render(request, "bingosync/bingosync.html", params)
+    except NotAuthenticatedError:
+        join_form = JoinRoomForm.for_room(room)
+        if 'password' in request.GET:
+            join_form.initial['passphrase'] = request.GET['password']
+        return _join_room(request, join_form, room)
 
 def _join_room(request, join_form, room):
     params = {
