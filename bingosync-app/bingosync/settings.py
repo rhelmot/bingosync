@@ -82,6 +82,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'url_tools.context_processors.current_url',
+                'bingosync.context_processors.stubtag',
             ],
         },
     },
