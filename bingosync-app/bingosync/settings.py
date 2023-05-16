@@ -181,7 +181,7 @@ LOGGING = {
         },
         'bingosync': {
             'handlers': ['console', 'info_log', 'warn_log', 'error_log', 'mail_admins'],
-            'level': 'INFO',
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
         },
     },
 }
