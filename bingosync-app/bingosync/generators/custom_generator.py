@@ -8,6 +8,7 @@ import urllib.parse
 
 from bingosync.generators.bingo_generator import BingoGenerator
 from bingosync.models.game_type import GameType
+import math
 
 
 class InvalidBoardException(Exception):
@@ -72,13 +73,21 @@ def _validate_difficulty_tier(goals, tier):
 
 def _parse_srl_v5_list(custom_board, size=5):
     if size:
+        provided_size = True
         size = int(size)
+    else:
+        provided_size = False
+        size = int(math.sqrt(len(custom_board)))
     if not isinstance(custom_board, list):
         raise InvalidBoardException('Board must be a list')
 
     if len(custom_board) != size*size:
-        raise InvalidBoardException(
-                'An SRL goal list must have exactly {} tiers (found {})'.format(size*size, len(custom_board)))
+        if provided_size:
+            raise InvalidBoardException(
+                    'An SRL goal list must have exactly {} tiers (found {})'.format(size*size, len(custom_board)))
+        else:
+            raise InvalidBoardException(
+                    'An SRL goal list must have exactly a square size (found {})'.format(len(custom_board)))
 
     for i, goals in enumerate(custom_board):
         _validate_difficulty_tier(goals, i+1)
