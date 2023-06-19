@@ -71,6 +71,8 @@ def _validate_difficulty_tier(goals, tier):
 
 
 def _parse_srl_v5_list(custom_board, size=5):
+    if size:
+        size = int(size)
     if not isinstance(custom_board, list):
         raise InvalidBoardException('Board must be a list')
 
