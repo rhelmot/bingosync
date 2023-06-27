@@ -1,94 +1,27 @@
 [
   [
     {
-      "name": "All Berries in Start of 1A (6)",
-      "types": [
-        "checkpoint_berries"
-      ]
-    },
-    {
-      "name": "Old Site Blue Heart",
-      "types": [
-        "earlygame",
-        "blue_heart"
-      ]
-    },
-    {
-      "name": "Talk to Theo in Crossing",
-      "types": [
-        "earlygame",
-        "cutscene"
-      ]
-    },
-    {
       "name": "Get a 1-Up in 1A",
       "types": [
-        "earlygame",
         "1up"
-      ]
-    },
-    {
-      "name": "Complete 1A Start without dashing",
-      "types": [
-        "earlygame",
-        "task"
       ]
     },
     {
       "name": "Forsaken City Cassette",
       "types": [
-        "earlygame",
         "cassette"
       ]
     },
     {
-      "name": "All Berries in Chasm (5)",
+      "name": "Talk to Theo in Crossing",
+      "types": [
+        "cutscene"
+      ]
+    },
+    {
+      "name": "All Berries in Start of 1A (6)",
       "types": [
         "checkpoint_berries"
-      ]
-    },
-    {
-      "name": "Get a 1-Up in 2 Chapters",
-      "types": [
-        "1up",
-        "challenge"
-      ]
-    },
-    {
-      "name": "Forsaken City Blue Heart",
-      "types": [
-        "earlygame",
-        "blue_heart"
-      ]
-    },
-    {
-      "name": "Complete 1A Start without jumping",
-      "types": [
-        "earlygame",
-        "task"
-      ]
-    }
-  ],
-  [
-    {
-      "name": "Complete Chasm without dashing",
-      "types": [
-        "earlygame",
-        "task"
-      ]
-    },
-    {
-      "name": "Complete Awake without dashing",
-      "types": [
-        "earlygame",
-        "task"
-      ]
-    },
-    {
-      "name": "Talk to Theo in Awake",
-      "types": [
-        "earlygame",
-        "cutscene"
       ]
     },
     {
@@ -98,15 +31,70 @@
       ]
     },
     {
+      "name": "Old Site Cassette",
+      "types": [
+        "cassette"
+      ]
+    },
+    {
+      "name": "Talk to Theo in Awake",
+      "types": [
+        "cutscene"
+      ]
+    },
+    {
+      "name": "All Berries in Awake (1)",
+      "types": []
+    }
+  ],
+  [
+    {
       "name": "All Berries in Start of 2A (9)",
       "types": [
         "checkpoint_berries"
       ]
     },
     {
-      "name": "All Berries in Awake (1)",
+      "name": "Forsaken City Blue Heart",
       "types": [
-        "earlygame"
+        "blue_heart"
+      ]
+    },
+    {
+      "name": "Complete 1A Start without dashing",
+      "types": [
+        "task"
+      ]
+    },
+    {
+      "name": "Read the Poem in 2A",
+      "types": []
+    },
+    {
+      "name": "All Berries in Chasm (5)",
+      "types": [
+        "checkpoint_berries"
+      ]
+    },
+    {
+      "name": "Old Site Blue Heart",
+      "types": [
+        "blue_heart"
+      ]
+    },
+    {
+      "name": "Complete Chasm without dashing",
+      "types": [
+        "task"
+      ]
+    }
+  ],
+  [
+    {
+      "name": "Get a 1-Up in 2 Chapters",
+      "types": [
+        "1up",
+        "challenge"
       ]
     },
     {
@@ -116,37 +104,9 @@
       ]
     },
     {
-      "name": "Old Site Cassette",
+      "name": "2 Cassettes",
       "types": [
-        "earlygame",
         "cassette"
-      ]
-    },
-    {
-      "name": "Get three 1-Ups",
-      "types": [
-        "1up",
-        "challenge"
-      ]
-    }
-  ],
-  [
-    {
-      "name": "5 Berries in 3 Chapters",
-      "types": [
-        "x_berries_in_x"
-      ]
-    },
-    {
-      "name": "Read the Poem in 2A",
-      "types": [
-        "earlygame"
-      ]
-    },
-    {
-      "name": "All Berries in Crossing (9)",
-      "types": [
-        "checkpoint_berries"
       ]
     },
     {
@@ -156,15 +116,29 @@
       ]
     },
     {
+      "name": "Get a 1-Up in 3 Chapters",
+      "types": [
+        "1up",
+        "challenge"
+      ]
+    },
+    {
       "name": "10 Berries in 2A",
       "types": [
         "amount_berries"
       ]
     },
     {
-      "name": "Grabless Start of 3A",
+      "name": "5 Berries in 3 Chapters",
       "types": [
-        "grabless"
+        "x_berries_in_x"
+      ]
+    },
+    {
+      "name": "Get three 1-Ups",
+      "types": [
+        "1up",
+        "challenge"
       ]
     },
     {
@@ -174,9 +148,80 @@
       ]
     },
     {
-      "name": "2 Cassettes",
+      "name": "Grabless Start of 3A",
       "types": [
-        "cassette"
+        "grabless"
+      ]
+    }
+  ],
+  [
+    {
+      "name": "Old Site B-Side",
+      "types": [
+        "b-side"
+      ]
+    },
+    {
+      "name": "Grabless 1A",
+      "types": [
+        "grabless"
+      ]
+    },
+    {
+      "name": "20 Berries",
+      "types": [
+        "amount_berries"
+      ]
+    },
+    {
+      "name": "All Berries in Intervention (8)",
+      "types": [
+        "checkpoint_berries"
+      ]
+    },
+    {
+      "name": "Blue and Red Heart in Old Site",
+      "types": [
+        "b-side"
+      ]
+    },
+    {
+      "name": "Complete Crossing without dashing",
+      "types": [
+        "task",
+        "challenge"
+      ]
+    },
+    {
+      "name": "Get a 1-Up in 4A",
+      "types": [
+        "1up",
+        "progress"
+      ]
+    },
+    {
+      "name": "Grabless 2A",
+      "types": [
+        "grabless"
+      ]
+    },
+    {
+      "name": "25 Berries",
+      "types": [
+        "amount_berries"
+      ]
+    },
+    {
+      "name": "All Berries in Crossing (9)",
+      "types": [
+        "checkpoint_berries"
+      ]
+    },
+    {
+      "name": "Grabless Start of 4A",
+      "types": [
+        "grabless",
+        "progress"
       ]
     }
   ],
@@ -188,30 +233,10 @@
       ]
     },
     {
-      "name": "Complete Crossing without dashing",
-      "types": [
-        "task",
-        "challenge"
-      ]
-    },
-    {
       "name": "Complete Shrine without dashing",
       "types": [
         "task",
         "midgame"
-      ]
-    },
-    {
-      "name": "Grabless Start of 4A",
-      "types": [
-        "grabless",
-        "progress"
-      ]
-    },
-    {
-      "name": "All Berries in Intervention (8)",
-      "types": [
-        "checkpoint_berries"
       ]
     },
     {
@@ -227,27 +252,6 @@
       ]
     },
     {
-      "name": "Get a 1-Up in 4A",
-      "types": [
-        "1up",
-        "progress"
-      ]
-    },
-    {
-      "name": "Old Site B-Side",
-      "types": [
-        "b-side"
-      ]
-    }
-  ],
-  [
-    {
-      "name": "Grabless 1A",
-      "types": [
-        "grabless"
-      ]
-    },
-    {
       "name": "4 Winged Berries",
       "types": [
         "special_berries"
@@ -257,19 +261,6 @@
       "name": "3 Blue Hearts",
       "types": [
         "amount_hearts"
-      ]
-    },
-    {
-      "name": "3 Winged Berries",
-      "types": [
-        "special_berries",
-        "earlygame"
-      ]
-    },
-    {
-      "name": "Grabless 2A",
-      "types": [
-        "grabless"
       ]
     },
     {
@@ -308,12 +299,6 @@
       "name": "Huge Mess: Chest \u2193 Towel \u2192 Books \u2191",
       "types": [
         "huge_mess_pathing"
-      ]
-    },
-    {
-      "name": "Blue and Red Heart in Old Site",
-      "types": [
-        "b-side"
       ]
     },
     {
@@ -376,13 +361,6 @@
       ]
     },
     {
-      "name": "Get a 1-Up in 3 Chapters",
-      "types": [
-        "1up",
-        "challenge"
-      ]
-    },
-    {
       "name": "Complete 3 A-Sides",
       "types": [
         "amount_chapters",
@@ -436,12 +414,6 @@
       ]
     },
     {
-      "name": "20 Berries",
-      "types": [
-        "amount_berries"
-      ]
-    },
-    {
       "name": "5 Keys",
       "types": [
         "keys"
@@ -471,12 +443,6 @@
       "types": [
         "checkpoint_berries",
         "progress"
-      ]
-    },
-    {
-      "name": "25 Berries",
-      "types": [
-        "amount_berries"
       ]
     }
   ],
