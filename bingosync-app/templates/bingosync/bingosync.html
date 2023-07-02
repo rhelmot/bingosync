@@ -44,6 +44,12 @@
                         <div class="flex-col-footer m-b-l" id="room-settings-container">
                             {% include 'bingosync/room_settings_panel.html' %}
                         </div>
+                        <!-- Celeste Long New is the current name of the category extensions -->
+                        {% if room.settings.game == "Celeste" or room.settings.game == "Celeste Long New" or room.settings.game == "Custom" %}
+                            <div class="flex-col-footer m-b-l" id="additional-settings-container">
+                                {% include 'bingosync/additional_settings_panel.html' %}
+                            </div>
+                        {% endif %}
                         <div class="flex-col-footer">
                             {% include 'bingosync/chat_settings_panel.html' %}
                         </div>
@@ -60,6 +66,7 @@
 <script src="{% static "bingosync/room/board_cover.js" %}"></script>
 <script src="{% static "bingosync/room/players_panel.js" %}"></script>
 <script src="{% static "bingosync/room/room_settings_panel.js" %}"></script>
+<script src="{% static "bingosync/room/additional_settings_panel.js" %}"></script>
 <script src="{% static "bingosync/room/chat_panel.js" %}"></script>
 <script src="{% static "bingosync/room/chat_socket.js" %}"></script>
 <script src="{% static "bingosync/bingosync.js" %}"></script>
@@ -85,20 +92,33 @@
         var boardCover = new BoardCover($(".board-container"), ROOM_SETTINGS.hide_card, boardRevealedUrl);
         var playersPanel = new PlayersPanel($("#players-panel"));
         var roomSettingsPanel = new RoomSettingsPanel($("#room-settings-container"), roomSettingsUrl);
+
+
+        var additionalSettingsPanel = undefined;
+
+        // Celeste Long New is the current name of the category extensions
+        if (ROOM_SETTINGS.game == "Celeste" || ROOM_SETTINGS.game == "Celeste Long New" || ROOM_SETTINGS.game == "Custom"){
+            var additionalSettingsPanel = new AdditionalSettingsPanel($("#additional-settings-container"), $("#bingo"));
+        }
+
         var chatPanel = new ChatPanel($("#bingo-chat"), $("#chat-settings"), chatUrl, chatHistoryUrl);
         initializeChatSettings($("#chat-settings"), $("#bingo-chat"));
 
         var chatSocket = new ChatSocket(chatPanel, board, playersPanel, socketsUrl);
 
-        // hacky callback to trigger an update of the playersPanel counters whenever we update the board.
-        var updateGoalCounters = function() {
+        // hacky callback to trigger an update of the playersPanel counters (& highlighter) whenever we update the board.
+        var boardRefreshCallback = function() {
             playersPanel.updateGoalCounters(board);
-        };
+
+            if (additionalSettingsPanel !== undefined){
+                additionalSettingsPanel.newBoard();
+            }
+        }
 
         // initialize magic global hack hooks
         refreshBoard = function () {
             roomSettingsPanel.reloadSettings();
-            board.reloadBoard(updateGoalCounters);
+            board.reloadBoard(boardRefreshCallback);
         };
         hideBoard = function() {
             boardCover.setBoardHidden(true);
@@ -113,7 +133,7 @@
         window.addEventListener('resize', function() { board.refitGoalText(); }, false);
 
         // Load in all of the actual data
-        board.reloadBoard(updateGoalCounters);
+        board.reloadBoard(boardRefreshCallback);
         chatPanel.reloadChatHistory(/*full=*/false);
         chatSocket.init(temporarySocketKey);
     });
