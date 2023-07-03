@@ -21,6 +21,7 @@ from bingosync import views, settings
 urlpatterns = [
     url(r'^$', views.rooms, name='rooms'),
     url(r'^room/(?P<encoded_room_uuid>.+)/board$', views.room_board, name='room_board'),
+    url(r'^room/(?P<encoded_room_uuid>.+)/scores$', views.room_scores, name='room_scores'),
     url(r'^room/(?P<encoded_room_uuid>.+)/feed$', views.room_feed, name='room_feed'),
     url(r'^room/(?P<encoded_room_uuid>.+)/disconnect$', views.room_disconnect, name='room_disconnect'),
     url(r'^room/(?P<encoded_room_uuid>.+)/room-settings$', views.room_settings, name='room_settings'),
