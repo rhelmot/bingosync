@@ -6,6 +6,8 @@ var PlayersPanel = (function(){
     };
 
     PlayersPanel.prototype.setPlayer = function(playerJson) {
+        console.log(playerJson);
+
         if(this.$playersPanel.find("#" + playerJson["uuid"]).length === 0) {
             // insert if the uuid is not already listed
             var colorClass = getSquareColorClass(playerJson["color"]);
