@@ -15,7 +15,7 @@ class Color(Enum):
     navy = 7
     teal = 8
     pink = 9
-    brown = 10
+    forest = 10
     yellow = 11
 
     def __str__(self):

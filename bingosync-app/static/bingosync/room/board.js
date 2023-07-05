@@ -1,7 +1,7 @@
 var Board = (function(){
     "use strict";
 
-    var ORDERED_COLORS = ["pink", "red", "orange", "brown", "yellow", "green", "teal", "blue", "navy", "purple"];
+    var ORDERED_COLORS = ["pink", "red", "orange", "yellow", "green", "teal", "forest", "blue", "navy", "purple"];
 
     function sortColors(colors) {
         var orderedColors = [];

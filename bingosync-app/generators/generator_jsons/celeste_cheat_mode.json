@@ -45,13 +45,13 @@
     ],
     [
       {
-        "name": "1-up in 1A",
+        "name": "1-Up in 1A",
         "types": [
           "1up"
         ]
       },
       {
-        "name": "1-up in 2A",
+        "name": "1-Up in 2A",
         "types": [
           "1up"
         ]
@@ -98,7 +98,7 @@
     ],
     [
       {
-        "name": "Two 1-ups",
+        "name": "Two 1-Ups",
         "types": [
           "1up"
         ]
@@ -308,7 +308,7 @@
         ]
       },
       {
-        "name": "1-up in 2 Chapters",
+        "name": "1-Up in 2 Chapters",
         "types": [
           "1up",
           "challenge"
@@ -329,7 +329,7 @@
         ]
       },
       {
-        "name": "1-up in 4A",
+        "name": "1-Up in 4A",
         "types": [
           "1up",
           "challenge"
@@ -348,14 +348,14 @@
         ]
       },
       {
-        "name": "Three 1-ups",
+        "name": "Three 1-Ups",
         "types": [
           "1up",
           "challenge"
         ]
       },
       {
-        "name": "1-up in 5A",
+        "name": "1-Up in 5A",
         "types": [
           "1up",
           "challenge"
@@ -863,7 +863,7 @@
         ]
       },
       {
-        "name": "1-up in 3 Chapters",
+        "name": "1-Up in 3 Chapters",
         "types": [
           "1up",
           "challenge"
