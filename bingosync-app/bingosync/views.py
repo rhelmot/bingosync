@@ -123,6 +123,17 @@ def room_board(request, encoded_room_uuid):
     board = room.current_game.board
     return JsonResponse(board, safe=False)
 
+def room_scores(request, encoded_room_uuid):
+    room = Room.get_for_encoded_uuid_or_404(encoded_room_uuid)
+    colors = [item.name for sublist in room.current_game.squares for item in sublist.color.colors]
+    colors = [color for color in colors if color != "blank"]
+    colorsDict = {}
+    for color in colors:
+        if not color in colorsDict:
+            colorsDict[color] = 0
+        colorsDict[color] += 1
+    return JsonResponse(colorsDict, safe=False)
+
 # AJAX view to render the room settings panel
 def room_settings(request, encoded_room_uuid):
     room = Room.get_for_encoded_uuid(encoded_room_uuid)
