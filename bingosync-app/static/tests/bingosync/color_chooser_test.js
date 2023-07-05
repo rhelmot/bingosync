@@ -39,21 +39,21 @@
         assert.strictEqual(colorChooser.getChosenColor(), "blue");
     });
 
-    QUnit.test("get initial color brown", function(assert) {
-        var player = {is_spectator: false, color: "brown"};
+    QUnit.test("get initial color forest", function(assert) {
+        var player = {is_spectator: false, color: "forest"};
         var colorChooser = new ColorChooser(this.$chooserPanel, player, this.colorSelectedUrl);
-        assert.strictEqual(colorChooser.getChosenColor(), "brown");
+        assert.strictEqual(colorChooser.getChosenColor(), "forest");
     });
 
     QUnit.test("set color purple", function(assert) {
-        var player = {is_spectator: false, color: "brown"};
+        var player = {is_spectator: false, color: "forest"};
         var colorChooser = new ColorChooser(this.$chooserPanel, player, this.colorSelectedUrl);
         colorChooser.setChosenColor("purple");
         assert.strictEqual(colorChooser.getChosenColor(), "purple");
     });
 
     QUnit.test("reports chosen color color", function(assert) {
-        var player = {is_spectator: false, color: "brown"};
+        var player = {is_spectator: false, color: "forest"};
         var colorChooser = new ColorChooser(this.$chooserPanel, player, this.colorSelectedUrl);
 
         window.sessionStorage.setItem("room", "some_room_id");
@@ -67,7 +67,7 @@
     });
 
     QUnit.test("changes color on click", function(assert) {
-        var player = {is_spectator: false, color: "brown"};
+        var player = {is_spectator: false, color: "forest"};
         var colorChooser = new ColorChooser(this.$chooserPanel, player, this.colorSelectedUrl);
 
         assert.expect(10 + 1 + 1);

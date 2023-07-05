@@ -278,20 +278,20 @@
     background-image: linear-gradient(#ed86aa, #cc6e8f);
 }
 
-.brownsquare {
-    background-image: linear-gradient(#ab5c23, #6d3811);
+.forestsquare {
+    background-image: linear-gradient(#33691e, #285417);
 }
 
 .tealsquare {
-    background-image: linear-gradient(#419695, #2e7372);
+    background-image: linear-gradient(teal, #2e7372);
 }
 
 .navysquare {
-    background-image: linear-gradient(#0d48b5, #022b75);
+    background-image: linear-gradient(#0d48b5, #0d398a);
 }
 
 .yellowsquare {
-    background-image: linear-gradient(#d8d014, #c1ba0b);
+    background-image: linear-gradient(#D3BE0F, #B7A50D);
 }
 
 .starred {
@@ -411,19 +411,19 @@
 }
 
 .tealplayer {
-    color: #419695;
+    color: teal;
 }
 
 .pinkplayer {
     color: #de799c;
 }
 
-.brownplayer {
-    color: #ab5c23;
+.forestplayer {
+    color: #33691e;
 }
 
 .yellowplayer {
-    color: #c1ba0b;
+    color: #D3BE0F;
 }
 
 .color-chooser {
