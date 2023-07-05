@@ -39,13 +39,11 @@ var ChatSocket = (function(){
             this.playersPanel.updateGoalCounters(this.board);
         }
         else if(json["type"] === "color") {
-            if (!json["player"]["is_referee"]){
-                this.playersPanel.setPlayer(json["player"]);
-                this.playersPanel.updateGoalCounters(this.board);
-            }
+            this.playersPanel.setPlayer(json["player"]);
+            this.playersPanel.updateGoalCounters(this.board);
         }
         else if(json["type"] === "connection") {
-            if(json["event_type"] === "connected" && !json["player"]["is_spectator"]  && !json["player"]["is_referee"]) {
+            if(json["event_type"] === "connected" && !json["player"]["is_spectator"]) {
                 this.playersPanel.setPlayer(json["player"]);
                 this.playersPanel.updateGoalCounters(this.board);
             }

@@ -66,7 +66,7 @@ def room_view(request, encoded_room_uuid):
     room = Room.get_for_encoded_uuid_or_404(encoded_room_uuid)
     try:
         if request.method == "POST":
-            join_form = JoinRoomForm(request.POST, tournament_mode=room.tournament_mode)
+            join_form = JoinRoomForm(request.POST)
             if join_form.is_valid():
                 player = join_form.create_player()
                 _save_session_player(request.session, player)
@@ -315,7 +315,7 @@ def join_room_api(request):
         "passphrase": raw_data["password"],
         "is_spectator": raw_data.get("is_specator", False),
     })
-    join_form = JoinRoomForm(form_data, tournament_mode=room.tournament_mode)
+    join_form = JoinRoomForm(form_data)
     if join_form.is_valid():
         player = join_form.create_player()
         _save_session_player(request.session, player)
