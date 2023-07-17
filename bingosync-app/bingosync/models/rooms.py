@@ -88,6 +88,10 @@ class Room(models.Model):
     @property
     def connected_players(self):
         return [player for player in self.players if player.connected]
+    
+    @property
+    def connected_players_as_json(self):
+        return [player.to_json() for player in self.players if player.connected]
 
     @property
     def latest_event_timestamp(self):

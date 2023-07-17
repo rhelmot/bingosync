@@ -276,12 +276,13 @@ def chat_message(request):
 
 @csrf_exempt
 def kick_players(request):
-    data = parse_body_json_or_400(request, required_keys=["room"])
+    data = parse_body_json_or_400(request, required_keys=["room", "player_uuid"])
     room = Room.get_for_encoded_uuid_or_404(data["room"])
+    player_uuid = data["player_uuid"]
     player = _get_session_player(request.session, room)
     if not player.is_referee:
         return HttpResponseBadRequest('Unauthorized: You are not a referee', status=401)
-    kick_players_event = KickPlayersEvent(player=player, player_color_value=player.color.value)
+    kick_players_event = KickPlayersEvent(player=player, player_color_value=player.color.value, player_uuid=player_uuid)
     publish_kick_players(kick_players_event)
     return HttpResponse("Recieved data: " + str(data))
 

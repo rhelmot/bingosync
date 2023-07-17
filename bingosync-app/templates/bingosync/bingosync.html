@@ -65,6 +65,7 @@
     </div>
 </div>
 {% include 'bingosync/new_card_dialog.html' %}
+{% include 'bingosync/referee_player_dialog.html' %}
 <script src="{% static "bingosync/room/util.js" %}"></script>
 <script src="{% static "bingosync/room/color_chooser.js" %}"></script>
 <script src="{% static "bingosync/room/board.js" %}"></script>
@@ -75,12 +76,15 @@
 <script src="{% static "bingosync/room/additional_settings_panel.js" %}"></script>
 <script src="{% static "bingosync/room/chat_panel.js" %}"></script>
 <script src="{% static "bingosync/room/chat_socket.js" %}"></script>
+<script src="{% static "bingosync/room/referee_dialog.js" %}"></script>
 <script src="{% static "bingosync/bingosync.js" %}"></script>
 <script>
     $(document).ready(function() {
         ROOM_SETTINGS = JSON.parse('{{ room.settings|jsonify|escapejs }}');
         var player = JSON.parse('{{ player.to_json|jsonify|escapejs }}');
         window.sessionStorage.setItem("room", "{{ room.encoded_uuid }}");
+
+        var connected_players = JSON.parse(' {{ room.connected_players_as_json|jsonify|escapejs }} ')
 
         var boardUrl = "{% url 'room_board' room.encoded_uuid %}";
         var chatHistoryUrl = "{% url 'room_feed' room.encoded_uuid %}";
@@ -109,20 +113,22 @@
             var additionalSettingsPanel = new AdditionalSettingsPanel($("#additional-settings-container"), $("#bingo"));
         }
 
-        if (player.is_referee){
-            var refereePanel = new RefereePanel($("#referee-panel"), kickPlayerUrl);
-        }
-
         var chatPanel = new ChatPanel($("#bingo-chat"), $("#chat-settings"), chatUrl, chatHistoryUrl);
         initializeChatSettings($("#chat-settings"), $("#bingo-chat"));
 
-        var handleKickMessage = function() {
-            if (!player.is_referee){
+        var handleKickMessage = function(player_uuid) {
+            console.log("Trying to kick " + player_uuid);
+            console.log("I am " + JSON.stringify(player));
+            if (player.uuid === player_uuid){
                 window.location = disconnectUrl;
             }
         }
 
-        var chatSocket = new ChatSocket(chatPanel, board, playersPanel, socketsUrl, handleKickMessage);
+        var refereeDialog = new RefereeDialog($("#referee-form"), connected_players, kickPlayerUrl);
+
+        $("#referee-portal").on('click', function(){refereeDialog.updatePlayerList()});
+
+        var chatSocket = new ChatSocket(chatPanel, board, playersPanel, socketsUrl, refereeDialog, handleKickMessage);
 
         // hacky callback to trigger an update of the playersPanel counters (& highlighter) whenever we update the board.
         var boardRefreshCallback = function() {

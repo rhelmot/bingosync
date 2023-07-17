@@ -134,12 +134,9 @@ class JoinRoomForm(forms.Form):
     
        
     def __init__(self, *args, **kwargs):
-        self.tournament_mode = kwargs["tournament_mode"]
+        self.tournament_mode = kwargs.pop("tournament_mode")
 
-        # I do not like this implementation, but can't come up with something better
-        new_kwargs = {k: v for k, v in kwargs.items() if k != "tournament_mode"}
-
-        super(JoinRoomForm, self).__init__(*args, **new_kwargs)
+        super(JoinRoomForm, self).__init__(*args, **kwargs)
 
         # There should be something here that disables/hides the checkbox, but I can't get that to work,
     

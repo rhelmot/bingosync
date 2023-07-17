@@ -1,11 +1,12 @@
 var ChatSocket = (function(){
     "use strict";
 
-    var ChatSocket = function(chatPanel, board, playersPanel, socketsUrl, handleKickMessage) {
+    var ChatSocket = function(chatPanel, board, playersPanel, socketsUrl, refereePanel, handleKickMessage) {
         this.chatPanel = chatPanel;
         this.board = board;
         this.playersPanel = playersPanel;
         this.socketsUrl = socketsUrl;
+        this.refereePanel = refereePanel;
         this.handleKickMessage = handleKickMessage;
     };
 
@@ -31,7 +32,6 @@ var ChatSocket = (function(){
 
     ChatSocket.prototype.onSocketMessage = function(evt) {
         var json = JSON.parse(evt.data);
-        //console.log(json);
         if (json["type"] === "error") {
             console.log("Got error message from socket: ", json);
             return;
@@ -46,16 +46,20 @@ var ChatSocket = (function(){
             }
         }
         else if(json["type"] === "connection") {
-            if(json["event_type"] === "connected" && !json["player"]["is_spectator"]  && !json["player"]["is_referee"]) {
-                this.playersPanel.setPlayer(json["player"]);
-                this.playersPanel.updateGoalCounters(this.board);
+            if(json["event_type"] === "connected") {
+                this.refereePanel.playedJoined(json["player"]);
+                if (!json["player"]["is_spectator"]  && !json["player"]["is_referee"]) {
+                    this.playersPanel.setPlayer(json["player"]);
+                    this.playersPanel.updateGoalCounters(this.board);
+                }
             }
             else if(json["event_type"] === "disconnected") {
+                this.refereePanel.playedLeft(json["player"]);
                 this.playersPanel.removePlayer(json["player"]);
             }
         }
         else if(json["type"] === "kick") {
-            this.handleKickMessage();
+            this.handleKickMessage(json["player_uuid"]);
         }
         else if(json["type"] === "new-card") {
             // TODO: remove this external dependency

@@ -3,6 +3,7 @@ from django.utils import timezone
 
 import datetime
 from enum import Enum, unique
+from uuid import uuid4
 
 from bingosync.models.colors import Color
 from bingosync.models.game_type import GameType
@@ -146,10 +147,13 @@ class RevealedEvent(Event):
         }
     
 class KickPlayersEvent(Event):
+    player_uuid = models.UUIDField(default=uuid4)
+
     def to_json(self):
         return {
             "type": "kick",
             "player": self.player.to_json(),
+            "player_uuid": self.player_uuid,
             "timestamp": self.json_timestamp
         }
 
