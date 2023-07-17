@@ -17,9 +17,9 @@ from bingosync.generators import InvalidBoardException, GeneratorException
 from bingosync.forms import RoomForm, JoinRoomForm, GoalListConverterForm
 from bingosync.models.colors import Color
 from bingosync.models.game_type import GameType, ALL_VARIANTS
-from bingosync.models.events import Event, ChatEvent, RevealedEvent, ConnectionEvent, NewCardEvent
+from bingosync.models.events import Event, ChatEvent, RevealedEvent, ConnectionEvent, NewCardEvent, KickPlayersEvent
 from bingosync.models.rooms import Room, Game, LockoutMode, Player
-from bingosync.publish import publish_goal_event, publish_chat_event, publish_color_event, publish_revealed_event
+from bingosync.publish import publish_goal_event, publish_chat_event, publish_color_event, publish_revealed_event, publish_kick_players
 from bingosync.publish import publish_connection_event, publish_new_card_event
 from bingosync.util import generate_encoded_uuid
 
@@ -66,7 +66,7 @@ def room_view(request, encoded_room_uuid):
     room = Room.get_for_encoded_uuid_or_404(encoded_room_uuid)
     try:
         if request.method == "POST":
-            join_form = JoinRoomForm(request.POST)
+            join_form = JoinRoomForm(request.POST, tournament_mode=room.tournament_mode)
             if join_form.is_valid():
                 player = join_form.create_player()
                 _save_session_player(request.session, player)
@@ -275,6 +275,17 @@ def chat_message(request):
     return HttpResponse("Recieved data: " + str(data))
 
 @csrf_exempt
+def kick_players(request):
+    data = parse_body_json_or_400(request, required_keys=["room"])
+    room = Room.get_for_encoded_uuid_or_404(data["room"])
+    player = _get_session_player(request.session, room)
+    if not player.is_referee:
+        return HttpResponseBadRequest('Unauthorized: You are not a referee', status=401)
+    kick_players_event = KickPlayersEvent(player=player, player_color_value=player.color.value)
+    publish_kick_players(kick_players_event)
+    return HttpResponse("Recieved data: " + str(data))
+
+@csrf_exempt
 def select_color(request):
     data = parse_body_json_or_400(request, required_keys=["room", "color"])
 
@@ -315,7 +326,7 @@ def join_room_api(request):
         "passphrase": raw_data["password"],
         "is_spectator": raw_data.get("is_specator", False),
     })
-    join_form = JoinRoomForm(form_data)
+    join_form = JoinRoomForm(form_data, tournament_mode=room.tournament_mode)
     if join_form.is_valid():
         player = join_form.create_player()
         _save_session_player(request.session, player)

@@ -24,6 +24,7 @@ class Room(models.Model):
     passphrase = models.CharField(max_length=255)
     active = models.BooleanField("Active", default=False)
     hide_card = models.BooleanField("Initially Hide Card", default=False)
+    tournament_mode = models.BooleanField("TournamentMode", default=False)
 
     def __str__(self):
         return self.name
@@ -58,7 +59,7 @@ class Room(models.Model):
 
     @staticmethod
     def get_listed_rooms():
-        active_rooms = Room.objects.filter(active=True)
+        active_rooms = Room.objects.filter(active=True, tournament_mode=False)
         # use -len(players) so that high numbers of players are at the top
         # but otherwise names are sorted lexicographically descending
         key = lambda room: (room.is_idle, -len(room.connected_players), room.name)
@@ -125,6 +126,7 @@ class Room(models.Model):
             "variant": str(game.game_type),
             "variant_id": game.game_type_value,
             "seed": game.seed,
+            "tournament_mode" : self.tournament_mode
         }
 
 class LockoutMode(Enum):
@@ -262,6 +264,7 @@ class Player(models.Model):
     color_value = models.IntegerField("Color", default=Color.player_default().value, choices=Color.player_choices())
     created_date = models.DateTimeField("Creation Time", default=timezone.now)
     is_spectator = models.BooleanField("Is Spectator", default=False)
+    is_referee = models.BooleanField("Is Referee", default=False)
 
     @staticmethod
     def get_for_encoded_uuid(encoded_player_uuid):
@@ -302,5 +305,6 @@ class Player(models.Model):
             "uuid": self.encoded_uuid,
             "name": self.name,
             "color": self.color.name,
-            "is_spectator": self.is_spectator
+            "is_spectator": self.is_spectator,
+            "is_referee" : self.is_referee
         }

@@ -31,6 +31,7 @@ urlpatterns = [
     url(r'^about', views.about, name='about'),
     url(r'^api/select$', views.goal_selected, name='goal_selected'),
     url(r'^api/chat$', views.chat_message, name='chat_message'),
+    url(r'^api/kick$', views.kick_players, name='kick_players'),
     url(r'^api/color$', views.select_color, name='select_color'),
     url(r'^api/revealed$', views.board_revealed, name='board_revealed'),
     url(r'^api/new-card$', views.new_card, name='new_card'),

@@ -22,7 +22,7 @@ class Event(models.Model):
 
     @staticmethod
     def event_classes():
-        return [ChatEvent, GoalEvent, ColorEvent, RevealedEvent, ConnectionEvent, NewCardEvent]
+        return [ChatEvent, GoalEvent, ColorEvent, RevealedEvent, ConnectionEvent, NewCardEvent, KickPlayersEvent]
 
     @staticmethod
     def get_all_for_room(room):
@@ -142,6 +142,14 @@ class RevealedEvent(Event):
             "type": "revealed",
             "player": self.player.to_json(),
             "player_color": self.player_color.name,
+            "timestamp": self.json_timestamp
+        }
+    
+class KickPlayersEvent(Event):
+    def to_json(self):
+        return {
+            "type": "kick",
+            "player": self.player.to_json(),
             "timestamp": self.json_timestamp
         }
 

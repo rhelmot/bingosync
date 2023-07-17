@@ -44,6 +44,7 @@ class RoomForm(forms.Form):
     size = forms.CharField(label="Board Size", widget=forms.NumberInput(attrs={"min": 1}),
                            help_text="Leave blank for the generator's default size (usually 5)", required=False)
     is_spectator = forms.BooleanField(label="Create as Spectator", required=False)
+    tournament_mode = forms.BooleanField(label="Enable tournament mode", required=False)
     hide_card = forms.BooleanField(label="Hide Card Initially", required=False)
 
     def __init__(self, *args, **kwargs):
@@ -77,6 +78,10 @@ class RoomForm(forms.Form):
             cleaned_data["custom_board"] = generator.validate_custom_json(custom_json, size=cleaned_data['size'])
         except InvalidBoardException as e:
             raise forms.ValidationError(e)
+                
+        # Tournament rooms always start you as a ref
+        if cleaned_data["tournament_mode"]:
+            cleaned_data["is_spectator"] = False
 
         return cleaned_data
 
@@ -91,6 +96,7 @@ class RoomForm(forms.Form):
         custom_board = self.cleaned_data.get("custom_board", [])
         is_spectator = self.cleaned_data["is_spectator"]
         hide_card = self.cleaned_data["hide_card"]
+        tournament_mode = self.cleaned_data["tournament_mode"]
 
         # apply filtered word blacklist
         room_name = FilteredPattern.filter_string(room_name)
@@ -103,13 +109,13 @@ class RoomForm(forms.Form):
 
         encrypted_passphrase = hashers.make_password(passphrase)
         with transaction.atomic():
-            room = Room(name=room_name, passphrase=encrypted_passphrase, hide_card=hide_card)
+            room = Room(name=room_name, passphrase=encrypted_passphrase, hide_card=hide_card, tournament_mode=tournament_mode)
             room.save()
 
             game = Game.from_board(board_json, room=room, game_type_value=game_type.value,
                     lockout_mode_value=lockout_mode.value, seed=seed)
 
-            creator = Player(room=room, name=nickname, is_spectator=is_spectator)
+            creator = Player(room=room, name=nickname, is_spectator=is_spectator, is_referee=tournament_mode)
             creator.save()
 
             room.update_active()
@@ -122,7 +128,21 @@ class JoinRoomForm(forms.Form):
     game_name = make_read_only_char_field(label="Game")
     player_name = forms.CharField(label="Nickname", max_length=PLAYER_NAME_MAX_LENGTH)
     passphrase = forms.CharField(label="Password", widget=forms.PasswordInput(render_value=True))
-    is_spectator = forms.BooleanField(label="Join as Spectator", required=False)
+    is_spectator = forms.BooleanField(label="Join as Spectator", required=False, disabled=False)
+    
+    tournament_mode = False
+    
+       
+    def __init__(self, *args, **kwargs):
+        self.tournament_mode = kwargs["tournament_mode"]
+
+        # I do not like this implementation, but can't come up with something better
+        new_kwargs = {k: v for k, v in kwargs.items() if k != "tournament_mode"}
+
+        super(JoinRoomForm, self).__init__(*args, **new_kwargs)
+
+        # There should be something here that disables/hides the checkbox, but I can't get that to work,
+    
 
     @staticmethod
     def for_room(room):
@@ -132,7 +152,7 @@ class JoinRoomForm(forms.Form):
             "creator_name": room.creator.name,
             "game_name": room.current_game.game_type.long_name,
         }
-        return JoinRoomForm(initial=initial_values)
+        return JoinRoomForm(initial=initial_values, tournament_mode=room.tournament_mode)
 
     def get_room(self):
         encoded_room_uuid = self.cleaned_data["encoded_room_uuid"]
@@ -154,7 +174,8 @@ class JoinRoomForm(forms.Form):
         is_spectator = self.cleaned_data["is_spectator"]
 
         with transaction.atomic():
-            player = Player(room=room, name=nickname, is_spectator=is_spectator)
+            # When the checkbox gets disables/hidden, remove this and.
+            player = Player(room=room, name=nickname, is_spectator=(is_spectator and not self.tournament_mode))
             player.save()
 
             room.update_active()

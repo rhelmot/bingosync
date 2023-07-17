@@ -1,11 +1,12 @@
 var ChatSocket = (function(){
     "use strict";
 
-    var ChatSocket = function(chatPanel, board, playersPanel, socketsUrl) {
+    var ChatSocket = function(chatPanel, board, playersPanel, socketsUrl, handleKickMessage) {
         this.chatPanel = chatPanel;
         this.board = board;
         this.playersPanel = playersPanel;
         this.socketsUrl = socketsUrl;
+        this.handleKickMessage = handleKickMessage;
     };
 
     ChatSocket.prototype.init = function(socketKey) {
@@ -39,17 +40,22 @@ var ChatSocket = (function(){
             this.playersPanel.updateGoalCounters(this.board);
         }
         else if(json["type"] === "color") {
-            this.playersPanel.setPlayer(json["player"]);
-            this.playersPanel.updateGoalCounters(this.board);
+            if (!json["player"]["is_referee"]){
+                this.playersPanel.setPlayer(json["player"]);
+                this.playersPanel.updateGoalCounters(this.board);
+            }
         }
         else if(json["type"] === "connection") {
-            if(json["event_type"] === "connected" && !json["player"]["is_spectator"]) {
+            if(json["event_type"] === "connected" && !json["player"]["is_spectator"]  && !json["player"]["is_referee"]) {
                 this.playersPanel.setPlayer(json["player"]);
                 this.playersPanel.updateGoalCounters(this.board);
             }
             else if(json["event_type"] === "disconnected") {
                 this.playersPanel.removePlayer(json["player"]);
             }
+        }
+        else if(json["type"] === "kick") {
+            this.handleKickMessage();
         }
         else if(json["type"] === "new-card") {
             // TODO: remove this external dependency
