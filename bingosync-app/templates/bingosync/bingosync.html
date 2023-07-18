@@ -93,6 +93,7 @@
         var socketsUrl = "{{ sockets_url }}/broadcast";
         var goalSelectedUrl = "{% url 'goal_selected' %}";
         var kickPlayerUrl = "{% url 'kick_players' %}";
+        var makeRefereeUrl = "{% url 'make_referee' %}";
         var boardRevealedUrl = "{% url 'board_revealed' %}";
         var roomSettingsUrl = "{% url 'room_settings' room.encoded_uuid %}";
         var temporarySocketKey = "{{ temporary_socket_key }}";
@@ -124,11 +125,18 @@
             }
         }
 
-        var refereeDialog = new RefereeDialog($("#referee-form"), connected_players, kickPlayerUrl);
+        var refereeDialog = new RefereeDialog($("#referee-form"), connected_players, kickPlayerUrl, makeRefereeUrl);
 
         $("#referee-portal").on('click', function(){refereeDialog.updatePlayerList()});
 
-        var chatSocket = new ChatSocket(chatPanel, board, playersPanel, socketsUrl, refereeDialog, handleKickMessage);
+        var handleRefereeMessage = function(player_uuid) {
+            console.log("Trying to reload " + player_uuid);
+            if (player.uuid === player_uuid){
+                document.location.reload();
+            }
+        }
+
+        var chatSocket = new ChatSocket(chatPanel, board, playersPanel, socketsUrl, refereeDialog, handleKickMessage, handleRefereeMessage);
 
         // hacky callback to trigger an update of the playersPanel counters (& highlighter) whenever we update the board.
         var boardRefreshCallback = function() {

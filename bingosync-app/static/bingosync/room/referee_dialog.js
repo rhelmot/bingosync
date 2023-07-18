@@ -1,9 +1,10 @@
 var RefereeDialog = (function(){
     "use strict";
 
-    var RefereeDialog = function($refereePlayerList, initialPlayerList, kickPlayerUrl) {
+    var RefereeDialog = function($refereePlayerList, initialPlayerList, kickPlayerUrl, makeRefereeUrl) {
         this.$refereePlayerList = $refereePlayerList[0];
         this.kickPlayerUrl = kickPlayerUrl;
+        this.makeRefereeUrl = makeRefereeUrl;
         this.playerList = [] 
 
         for (let i in initialPlayerList){
@@ -45,8 +46,17 @@ var RefereeDialog = (function(){
         kickButton.onclick = () => this.kickPlayer(player["uuid"]);
         kickButton.innerText = "Kick Player";
 
+        var makeRefereeButton = document.createElement('button');
+        makeRefereeButton.type = "button";
+        makeRefereeButton.classList = "btn btn-primary";
+        makeRefereeButton.style = "margin: 0; display: flex; align-items: center;"
+        makeRefereeButton.onclick = () => this.makeReferee(player["uuid"]);
+        makeRefereeButton.innerText = "Make Referee";
+        makeRefereeButton.disabled = player.is_referee;
+
         div.appendChild(name);
         div.appendChild(kickButton);
+        div.appendChild(makeRefereeButton);
 
         return div;
     }
@@ -75,6 +85,24 @@ var RefereeDialog = (function(){
                 console.log(result);
             }
         });
+    }
+
+    RefereeDialog.prototype.makeReferee = function(player_uuid){
+        console.log("reffing " + player_uuid);
+        console.log(this.makeRefereeUrl);
+        
+        $.ajax({
+            "url": this.makeRefereeUrl,
+            "type": "PUT",
+            "data": JSON.stringify({
+                "room": window.sessionStorage.getItem("room"),
+                "player_uuid":player_uuid,
+            }),
+            "error": function(result) {
+                console.log(result);
+            }
+        });
+        
     }
 
     return RefereeDialog;

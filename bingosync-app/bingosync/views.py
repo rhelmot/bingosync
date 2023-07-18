@@ -17,9 +17,9 @@ from bingosync.generators import InvalidBoardException, GeneratorException
 from bingosync.forms import RoomForm, JoinRoomForm, GoalListConverterForm
 from bingosync.models.colors import Color
 from bingosync.models.game_type import GameType, ALL_VARIANTS
-from bingosync.models.events import Event, ChatEvent, RevealedEvent, ConnectionEvent, NewCardEvent, KickPlayersEvent
+from bingosync.models.events import Event, ChatEvent, RevealedEvent, ConnectionEvent, NewCardEvent, KickPlayersEvent, MakePlayerRefereeEvent
 from bingosync.models.rooms import Room, Game, LockoutMode, Player
-from bingosync.publish import publish_goal_event, publish_chat_event, publish_color_event, publish_revealed_event, publish_kick_players
+from bingosync.publish import publish_goal_event, publish_chat_event, publish_color_event, publish_revealed_event, publish_kick_players, publish_make_referee
 from bingosync.publish import publish_connection_event, publish_new_card_event
 from bingosync.util import generate_encoded_uuid
 
@@ -284,6 +284,23 @@ def kick_players(request):
         return HttpResponseBadRequest('Unauthorized: You are not a referee', status=401)
     kick_players_event = KickPlayersEvent(player=player, player_color_value=player.color.value, player_uuid=player_uuid)
     publish_kick_players(kick_players_event)
+    return HttpResponse("Recieved data: " + str(data))
+
+@csrf_exempt
+def make_referee(request):
+    data = parse_body_json_or_400(request, required_keys=["room", "player_uuid"])
+    room = Room.get_for_encoded_uuid_or_404(data["room"])
+    player_uuid = data["player_uuid"]
+    player = _get_session_player(request.session, room)
+    if not player.is_referee:
+        return HttpResponseBadRequest('Unauthorized: You are not a referee', status=401)
+    make_player_referee_event = MakePlayerRefereeEvent(player=player, player_color_value=player.color.value, player_uuid=player_uuid)
+    new_ref = next((p for p in room.connected_players if p.encoded_uuid == player_uuid), None)
+    if (new_ref == None):
+        return HttpResponseBadRequest('Player uuid not found', status=400)
+    new_ref.is_referee = True
+    new_ref.save()
+    publish_make_referee(make_player_referee_event)
     return HttpResponse("Recieved data: " + str(data))
 
 @csrf_exempt

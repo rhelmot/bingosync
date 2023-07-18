@@ -156,6 +156,17 @@ class KickPlayersEvent(Event):
             "player_uuid": self.player_uuid,
             "timestamp": self.json_timestamp
         }
+    
+class MakePlayerRefereeEvent(Event):
+    player_uuid = models.UUIDField(default=uuid4)
+
+    def to_json(self):
+        return {
+            "type": "referee",
+            "player": self.player.to_json(),
+            "player_uuid": self.player_uuid,
+            "timestamp": self.json_timestamp
+        }
 
 @unique
 class ConnectionEventType(Enum):
