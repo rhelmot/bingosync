@@ -484,12 +484,6 @@
         ]
       },
       {
-        "name": "Grabless Huge Mess",
-        "types": [
-          "grabless"
-        ]
-      },
-      {
         "name": "Huge Mess: Towel \u2192 Books \u2191 Chest \u2193",
         "types": [
           "huge_mess_pathing"
