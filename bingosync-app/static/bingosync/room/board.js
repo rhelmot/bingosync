@@ -74,6 +74,7 @@ var Board = (function(){
 
     var Square = function($square) {
         this.$square = $square;
+        this.hidden = $square.hidden;
         this.$square.on("click", this.onClick);
     };
 
@@ -101,13 +102,14 @@ var Board = (function(){
         setSquareColors(this.$square, json["colors"]);
     };
 
-    var Board = function($board, playerJson, colorChooser, getBoardUrl, selectGoalUrl) {
+    var Board = function($board, playerJson, colorChooser, getBoardUrl, selectGoalUrl, fogOfWar) {
         this.$board = $board;
         this.size = 0;
         this.isSpectator = playerJson.is_spectator;
         this.colorChooser = colorChooser;
         this.getBoardUrl = getBoardUrl;
         this.selectGoalUrl = selectGoalUrl;
+        this.fogOfWar = fogOfWar;
         this.squares = [];
         this.$squares = null;
     };
@@ -151,6 +153,10 @@ var Board = (function(){
         this.squares = [];
         for (let i = 0; i < size * size; i++) {
             var $square = this.$board.find("#slot" + (i + 1));
+            // if fog of war is enabled, hide all squares by default
+            if (this.fogOfWar) { 
+                $square.hidden = true
+            }
             this.squares.push(new Square($square));
         }
 
@@ -243,6 +249,10 @@ var Board = (function(){
     Board.prototype.clickSquare = function(ev, $square) {
         var chosenColor = this.colorChooser.getChosenColor();
         var chosenColorClass = getSquareColorClass(chosenColor);
+
+        if (this.fogOfWar && $square.hidden) { 
+            $square.toggleClass("hiddentext"); 
+        }
 
         // Are we adding or removing the color
         var removeColor;

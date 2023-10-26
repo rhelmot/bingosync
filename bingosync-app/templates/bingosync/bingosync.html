@@ -88,7 +88,7 @@
 
         // Construct all of the UI components
         var colorChooser = new ColorChooser($("#color-chooser"), player, colorSelectedUrl);
-        var board = new Board($("#bingo"), player, colorChooser, boardUrl, goalSelectedUrl);
+        var board = new Board($("#bingo"), player, colorChooser, boardUrl, goalSelectedUrl, ROOM_SETTINGS.fog_of_war);
         var boardCover = new BoardCover($(".board-container"), ROOM_SETTINGS.hide_card, boardRevealedUrl);
         var playersPanel = new PlayersPanel($("#players-panel"));
         var roomSettingsPanel = new RoomSettingsPanel($("#room-settings-container"), roomSettingsUrl);
