@@ -120,6 +120,7 @@ class Room(models.Model):
         return {
             "hide_card": self.hide_card,
             "lockout_mode": str(game.lockout_mode),
+            "fog_of_war": game.fog_of_war,
             "game": str(game.game_type.group),
             "game_id": game.game_type.group.value,
             "variant": str(game.game_type),
@@ -158,6 +159,7 @@ class Game(models.Model):
     created_date = models.DateTimeField("Creation Time", default=timezone.now)
     game_type_value = models.IntegerField("Game Type", choices=GameType.choices())
     lockout_mode_value = models.IntegerField("Lockout Mode", choices=LockoutMode.choices(), default=LockoutMode.default_value())
+    fog_of_war = models.BooleanField("Fog of War", default=False)
 
     def __str__(self):
         return self.room.name + ": " + str(self.seed)

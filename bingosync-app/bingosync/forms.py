@@ -45,6 +45,7 @@ class RoomForm(forms.Form):
                            help_text="Leave blank for the generator's default size (usually 5)", required=False)
     is_spectator = forms.BooleanField(label="Create as Spectator", required=False)
     hide_card = forms.BooleanField(label="Hide Card Initially", required=False)
+    fog_of_war = forms.BooleanField(label="Fog of War", required=False)
 
     def __init__(self, *args, **kwargs):
         super(RoomForm, self).__init__(*args, **kwargs)
@@ -91,6 +92,7 @@ class RoomForm(forms.Form):
         custom_board = self.cleaned_data.get("custom_board", [])
         is_spectator = self.cleaned_data["is_spectator"]
         hide_card = self.cleaned_data["hide_card"]
+        fog_of_war = self.cleaned_data["fog_of_war"]
 
         # apply filtered word blacklist
         room_name = FilteredPattern.filter_string(room_name)
@@ -107,7 +109,7 @@ class RoomForm(forms.Form):
             room.save()
 
             game = Game.from_board(board_json, room=room, game_type_value=game_type.value,
-                    lockout_mode_value=lockout_mode.value, seed=seed)
+                    lockout_mode_value=lockout_mode.value, seed=seed, fog_of_war=fog_of_war)
 
             creator = Player(room=room, name=nickname, is_spectator=is_spectator)
             creator.save()
