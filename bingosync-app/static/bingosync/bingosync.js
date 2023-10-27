@@ -1,5 +1,5 @@
 
-function initializeChatSettings($chatSettings, $chatWindow) {
+function initializeChatSettings($chatSettings, $chatWindow, fogOfWar=false) {
     $("#chat-settings-collapse").on("mousedown", function() {
         $("#chat-settings .panel-body").toggle(50);
     });
@@ -19,6 +19,9 @@ function initializeChatSettings($chatSettings, $chatWindow) {
     $chatSettings.find("#timestamp-toggle").on("change", function() {
         $chatWindow.find(".chat-timestamp").toggle(this.checked);
     });
+
+    if (fogOfWar) {
+        $chatSettings.find("#goal-entry-toggle").prop("checked", false);
+        $chatWindow.find(".goal-entry").toggle(this.checked);
+    }
 }
-
-
