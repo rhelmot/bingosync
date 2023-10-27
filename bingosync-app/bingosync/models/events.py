@@ -77,6 +77,7 @@ class NewCardEvent(Event):
     game_type_value = models.IntegerField(choices=GameType.choices())
     seed = models.BigIntegerField(default=0)
     hide_card = models.BooleanField(default=False)
+    fog_of_war = models.BooleanField(default=False)
 
     @property
     def game_type(self):
@@ -97,6 +98,7 @@ class NewCardEvent(Event):
             "hide_card": self.hide_card,
             "is_current": self.is_current,
             "timestamp": self.json_timestamp,
+            "fog_of_war": self.fog_of_war,
         }
 
 class GoalEvent(Event):

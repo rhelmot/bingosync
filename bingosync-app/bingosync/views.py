@@ -79,6 +79,7 @@ def room_view(request, encoded_room_uuid):
                     "game_type": room.current_game.game_type.group.value,
                     "variant_type": room.current_game.game_type.value,
                     "lockout_mode": room.current_game.lockout_mode.value,
+                    "fog_of_war": room.current_game.fog_of_war,
                     "hide_card": room.hide_card,
                     "size": room.current_game.size,
                 }
@@ -91,6 +92,7 @@ def room_view(request, encoded_room_uuid):
                         "seed",
                         "size",
                         "hide_card",
+                        "fog_of_war",
                 )
                 new_card_form.helper['variant_type'].wrap(Field, wrapper_class='hidden')
                 new_card_form.helper['custom_json'].wrap(Field, wrapper_class='hidden')
@@ -148,6 +150,10 @@ def new_card(request):
     player = _get_session_player(request.session, room)
 
     lockout_mode = LockoutMode.for_value(int(data["lockout_mode"]))
+    try:
+        fog_of_war = True if data["fog_of_war"] == "on" else False
+    except:
+        fog_of_war = False
     hide_card = data["hide_card"]
     seed = data["seed"]
     size = data['size']
@@ -179,14 +185,15 @@ def new_card(request):
         return HttpResponseBadRequest(str(e))
 
     with transaction.atomic():
-        game = Game.from_board(board_json, room=room, game_type_value=game_type.value, lockout_mode_value=lockout_mode.value, seed=seed)
+        game = Game.from_board(board_json, room=room, game_type_value=game_type.value, 
+                               lockout_mode_value=lockout_mode.value, seed=seed, fog_of_war=fog_of_war)
 
         if hide_card != room.hide_card:
             room.hide_card = hide_card
         room.update_active() # This saves the room
 
         new_card_event = NewCardEvent(player=player, player_color_value=player.color.value,
-                game_type_value=game_type.value, seed=seed, hide_card=hide_card)
+                game_type_value=game_type.value, seed=seed, hide_card=hide_card, fog_of_war=fog_of_war)
         new_card_event.save()
     publish_new_card_event(new_card_event)
 

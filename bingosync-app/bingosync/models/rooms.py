@@ -120,6 +120,7 @@ class Room(models.Model):
         return {
             "hide_card": self.hide_card,
             "lockout_mode": str(game.lockout_mode),
+            "fog_of_war": game.fog_of_war,
             "game": str(game.game_type.group),
             "game_id": game.game_type.group.value,
             "variant": str(game.game_type),
@@ -158,6 +159,7 @@ class Game(models.Model):
     created_date = models.DateTimeField("Creation Time", default=timezone.now)
     game_type_value = models.IntegerField("Game Type", choices=GameType.choices())
     lockout_mode_value = models.IntegerField("Lockout Mode", choices=LockoutMode.choices(), default=LockoutMode.default_value())
+    fog_of_war = models.BooleanField("Fog of War", default=False)
 
     def __str__(self):
         return self.room.name + ": " + str(self.seed)
@@ -173,7 +175,7 @@ class Game(models.Model):
             game.save()
             for index, square_json in enumerate(board_json):
                 slot = index + 1
-                square = Square(game=game, slot=slot, goal=square_json["name"])
+                square = Square(game=game, slot=slot, goal=square_json["name"], tier=square_json["tier"])
                 square.full_clean()
                 square.save()
         return game
@@ -231,6 +233,7 @@ class Square(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     slot = models.IntegerField()
     goal = models.CharField(max_length=255)
+    tier = models.IntegerField(default=0)
     color_value = models.IntegerField("Color", default=CompositeColor.goal_default().value, choices=CompositeColor.goal_choices())
 
     @property
@@ -248,6 +251,7 @@ class Square(models.Model):
     def to_json(self):
         return {
             "name": self.goal,
+            "tier": self.tier,
             "slot": self.slot_name,
             "colors": self.color.name
         }

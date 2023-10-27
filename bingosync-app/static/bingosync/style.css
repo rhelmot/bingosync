@@ -186,6 +186,11 @@
     overflow: hidden;
 }
 
+.hiddentext {
+    text-indent: 120%;
+    white-space: nowrap; 
+}
+
 /* square that is covered by a board cover, hides the goal text */
 .hidden-card .square {
     text-indent: 120%;

@@ -88,11 +88,11 @@
 
         // Construct all of the UI components
         var colorChooser = new ColorChooser($("#color-chooser"), player, colorSelectedUrl);
-        var board = new Board($("#bingo"), player, colorChooser, boardUrl, goalSelectedUrl);
+        var board = new Board($("#bingo"), player, colorChooser, boardUrl, goalSelectedUrl, ROOM_SETTINGS.fog_of_war);
+        colorChooser.$board = board;
         var boardCover = new BoardCover($(".board-container"), ROOM_SETTINGS.hide_card, boardRevealedUrl);
         var playersPanel = new PlayersPanel($("#players-panel"));
-        var roomSettingsPanel = new RoomSettingsPanel($("#room-settings-container"), roomSettingsUrl);
-
+        var roomSettingsPanel = new RoomSettingsPanel($("#room-settings-container"), roomSettingsUrl, board);
 
         var additionalSettingsPanel = undefined;
 
@@ -102,7 +102,7 @@
         }
 
         var chatPanel = new ChatPanel($("#bingo-chat"), $("#chat-settings"), chatUrl, chatHistoryUrl);
-        initializeChatSettings($("#chat-settings"), $("#bingo-chat"));
+        initializeChatSettings($("#chat-settings"), $("#bingo-chat"), ROOM_SETTINGS.fog_of_war);
 
         var chatSocket = new ChatSocket(chatPanel, board, playersPanel, socketsUrl);
 

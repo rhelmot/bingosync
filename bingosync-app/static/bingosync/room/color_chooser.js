@@ -28,7 +28,7 @@ var ColorChooser = (function(){
     };
 
     ColorChooser.prototype.reportChosenColor = function(newChosenColor) {
-        $.ajax({
+        return $.ajax({
             "url": this.colorSelectedUrl,
             "type": "PUT",
             "data": JSON.stringify({
@@ -49,7 +49,7 @@ var ColorChooser = (function(){
         }
 
         this.setChosenColor(newChosenColor);
-        this.reportChosenColor(newChosenColor);
+        this.reportChosenColor(newChosenColor).then(response => this.$board.hideSquares());
     };
 
     ColorChooser.prototype.toggleCollapse = function(ev) {
