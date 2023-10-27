@@ -209,8 +209,32 @@ var Board = (function(){
         return false;
     };
 
-    Board.prototype.hideSquares = function() {
-        if (!this.fogOfWar) return;
+    Board.prototype.hideSquares = function(override=null) {
+        // hack to get new boards to work properly
+        if (override !== null) {
+            this.fogOfWar = override;
+        }
+
+        const hideIfHidden = function(el) {
+            if (el.tier === 0) {
+                el.$square.removeClass("hiddentext");
+                return;
+            }
+
+            if (el.hidden) {
+                el.$square.addClass("hiddentext"); 
+            } else {
+                el.$square.removeClass("hiddentext"); 
+            }
+        }
+
+        if (!this.fogOfWar) {
+            for (let i = 0; i < this.size * this.size; i++) {
+                this.squares[i].hidden = false
+            }
+            this.squares.forEach((el) => hideIfHidden(el));
+            return;
+        }
 
         var chosenColor = this.colorChooser.getChosenColor();
         var chosenColorClass = getSquareColorClass(chosenColor);
@@ -248,18 +272,7 @@ var Board = (function(){
             }
         }
 
-        const hideIfHidden = function(el) {
-            if (el.tier === 0) {
-                el.$square.removeClass("hiddentext");
-                return;
-            }
-
-            if (el.hidden) {
-                el.$square.addClass("hiddentext"); 
-            } else {
-                el.$square.removeClass("hiddentext"); 
-            }
-        }
+        
         this.squares.forEach((el) => hideIfHidden(el));
     };
 

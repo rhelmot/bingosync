@@ -1,9 +1,10 @@
 var RoomSettingsPanel = (function(){
     "use strict";
 
-    var RoomSettingsPanel = function($roomSettingsContainer, roomSettingsUrl) {
+    var RoomSettingsPanel = function($roomSettingsContainer, roomSettingsUrl, board) {
         this.$roomSettingsContainer = $roomSettingsContainer;
         this.roomSettingsUrl = roomSettingsUrl;
+        this.board = board;
 
         this.initPanel();
     };
@@ -18,9 +19,9 @@ var RoomSettingsPanel = (function(){
         });
     };
 
-    RoomSettingsPanel.prototype.reloadSettings = function() {
+    RoomSettingsPanel.prototype.reloadSettingsRequest = function() {
         var that = this;
-        $.ajax({
+        return $.ajax({
             "url": this.roomSettingsUrl,
             "success": function(result) {
                 that.$roomSettingsContainer.html(result.panel);
@@ -45,7 +46,15 @@ var RoomSettingsPanel = (function(){
             "error": function(result) {
                 console.log(result);
             }
+        }).always(function(){
+            that.board.fogOfWar = ROOM_SETTINGS.fog_of_war;
+
+            that.board.hideSquares(ROOM_SETTINGS.fog_of_war);
         });
+    }
+
+    RoomSettingsPanel.prototype.reloadSettings = function() {
+        this.reloadSettingsRequest();
     };
 
     return RoomSettingsPanel;

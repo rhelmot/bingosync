@@ -159,8 +159,6 @@ def new_card(request):
     size = data['size']
     custom_json = data.get("custom_json", "")
 
-    print(fog_of_war)
-
     #create new game
     game_type = GameType.for_value(int(data["game_type"]))
     try:
@@ -195,7 +193,7 @@ def new_card(request):
         room.update_active() # This saves the room
 
         new_card_event = NewCardEvent(player=player, player_color_value=player.color.value,
-                game_type_value=game_type.value, seed=seed, hide_card=hide_card)
+                game_type_value=game_type.value, seed=seed, hide_card=hide_card, fog_of_war=fog_of_war)
         new_card_event.save()
     publish_new_card_event(new_card_event)
 

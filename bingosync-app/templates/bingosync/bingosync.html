@@ -92,8 +92,7 @@
         colorChooser.$board = board;
         var boardCover = new BoardCover($(".board-container"), ROOM_SETTINGS.hide_card, boardRevealedUrl);
         var playersPanel = new PlayersPanel($("#players-panel"));
-        var roomSettingsPanel = new RoomSettingsPanel($("#room-settings-container"), roomSettingsUrl);
-
+        var roomSettingsPanel = new RoomSettingsPanel($("#room-settings-container"), roomSettingsUrl, board);
 
         var additionalSettingsPanel = undefined;
 

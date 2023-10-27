@@ -178,7 +178,6 @@ class Game(models.Model):
                 square = Square(game=game, slot=slot, goal=square_json["name"], tier=square_json["tier"])
                 square.full_clean()
                 square.save()
-        print(game)
         return game
 
     @property
