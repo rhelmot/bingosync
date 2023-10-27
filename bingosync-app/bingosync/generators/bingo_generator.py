@@ -90,4 +90,5 @@ def process_card(card, size):
         card = card[1:]
     if len(card) != size * size:
         raise Exception("bad card length: " + str(len(card)) + ", card: " + str(card))
-    return seed, [{"name": goal.get("name", "")} for goal in card]
+    x = [{"name": goal.get("name", ""), "tier": goal.get("difficulty", "")} for goal in card]
+    return seed, x

@@ -99,6 +99,7 @@ var Board = (function(){
         this.$square.html('<div class="starred hidden"></div><div class="shadow"></div>' +
                           '<div class="vertical-center text-container"></div>');
         this.$square.children(".text-container").text(json["name"]);
+        this.tier = json["tier"]
         setSquareColors(this.$square, json["colors"]);
     };
 
@@ -160,6 +161,8 @@ var Board = (function(){
             this.squares.push(new Square($square));
         }
 
+        this.hideSquares()
+
         var that = this;
         if (!this.isSpectator) {
             this.$squares.on("click", function(ev) { that.clickSquare(ev, $(this)); });
@@ -195,18 +198,83 @@ var Board = (function(){
         });
     };
 
+    Board.prototype.checkTile = function(i, chosenColorClass) {
+        var x = $.isEmptyObject(getSquareColors(this.squares[i].$square))
+        if (!x) {
+            var x = squareHasColor(this.squares[i].$square, chosenColorClass)
+            if (x) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    Board.prototype.hideSquares = function() {
+        if (!this.fogOfWar) return;
+
+        var chosenColor = this.colorChooser.getChosenColor();
+        var chosenColorClass = getSquareColorClass(chosenColor);
+
+        for (let i = 0; i < this.size * this.size; i++) {
+            this.squares[i].hidden = true
+
+            if (this.checkTile(i, chosenColorClass)) {
+                this.squares[i].hidden = false
+            }
+            
+
+            if (i % this.size !== 0) {
+                if (this.checkTile(i - 1, chosenColorClass)) {
+                    this.squares[i].hidden = false
+                }
+            }
+
+            if (i % this.size !== this.size - 1) {
+                if (this.checkTile(i + 1, chosenColorClass)) {
+                    this.squares[i].hidden = false
+                }
+            }
+
+            if (i >= this.size) {
+                if (this.checkTile(i - this.size, chosenColorClass)) {
+                    this.squares[i].hidden = false
+                }
+            }
+
+            if (i <= (this.size * (this.size - 1) - 1)) {
+                if (this.checkTile(i + this.size, chosenColorClass)) {
+                    this.squares[i].hidden = false
+                }
+            }
+        }
+
+        const hideIfHidden = function(el) {
+            if (el.tier === 0) {
+                el.$square.removeClass("hiddentext");
+                return;
+            }
+
+            if (el.hidden) {
+                el.$square.addClass("hiddentext"); 
+            } else {
+                el.$square.removeClass("hiddentext"); 
+            }
+        }
+        this.squares.forEach((el) => hideIfHidden(el));
+    };
+
     Board.prototype.setJson = function(json) {
         this.setup(preciseSqrt(json.length));
 
-        for(let i = 0; i < json.length; i++) {
+        for (let i = 0; i < json.length; i++) {
             this.squares[i].setJson(json[i]);
         }
         this.refitGoalText();
     };
 
-    Board.prototype.reloadBoard = function(callback) {
+    Board.prototype.reloadBoardRequest = function(callback) {
         var that = this;
-        $.ajax({
+        return $.ajax({
             "url": this.getBoardUrl,
             "success": function(result) {
                 that.setJson(result);
@@ -215,6 +283,10 @@ var Board = (function(){
                 }
             }
         });
+    }
+
+    Board.prototype.reloadBoard = function(callback) {
+        this.reloadBoardRequest(callback).then(response => this.hideSquares());
     };
 
     Board.prototype.getSquare = function(slot) {
@@ -246,13 +318,9 @@ var Board = (function(){
         return count;
     };
 
-    Board.prototype.clickSquare = function(ev, $square) {
+    Board.prototype.colorSquare = function(ev, $square) {
         var chosenColor = this.colorChooser.getChosenColor();
         var chosenColorClass = getSquareColorClass(chosenColor);
-
-        if (this.fogOfWar && $square.hidden) { 
-            $square.toggleClass("hiddentext"); 
-        }
 
         // Are we adding or removing the color
         var removeColor;
@@ -272,8 +340,8 @@ var Board = (function(){
         else {
             return;
         }
-
-        $.ajax({
+        
+        return $.ajax({
             "url": this.selectGoalUrl,
             "type": "PUT",
             "data": JSON.stringify({
@@ -288,6 +356,10 @@ var Board = (function(){
                 console.log(result);
             }
         });
+    }
+
+    Board.prototype.clickSquare = function(ev, $square) {
+        this.colorSquare(ev, $square).then(response => this.hideSquares())
     };
 
     Board.prototype.refitGoalText = function() {

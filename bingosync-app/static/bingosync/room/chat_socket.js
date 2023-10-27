@@ -37,6 +37,7 @@ var ChatSocket = (function(){
         } else if (json["type"] === "goal") {
             this.board.getSquare(json["square"]["slot"]).setColors(json["square"]["colors"]);
             this.playersPanel.updateGoalCounters(this.board);
+            this.board.hideSquares();
         }
         else if(json["type"] === "color") {
             this.playersPanel.setPlayer(json["player"]);

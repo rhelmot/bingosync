@@ -175,9 +175,10 @@ class Game(models.Model):
             game.save()
             for index, square_json in enumerate(board_json):
                 slot = index + 1
-                square = Square(game=game, slot=slot, goal=square_json["name"])
+                square = Square(game=game, slot=slot, goal=square_json["name"], tier=square_json["tier"])
                 square.full_clean()
                 square.save()
+        print(game)
         return game
 
     @property
@@ -233,6 +234,7 @@ class Square(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     slot = models.IntegerField()
     goal = models.CharField(max_length=255)
+    tier = models.IntegerField(default=0)
     color_value = models.IntegerField("Color", default=CompositeColor.goal_default().value, choices=CompositeColor.goal_choices())
 
     @property
@@ -250,6 +252,7 @@ class Square(models.Model):
     def to_json(self):
         return {
             "name": self.goal,
+            "tier": self.tier,
             "slot": self.slot_name,
             "colors": self.color.name
         }
