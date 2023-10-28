@@ -79,16 +79,21 @@ class BingoGenerator:
 
         js_command = "bingoGenerator(bingoList, " + json.dumps(opts) + ")"
         card = self.eval(js_command)
-        return process_card(card, size)
+
+        print(card)
+
+        return process_card(card, seed, size)
 
 
-def process_card(card, size):
+def process_card(card, seed, size):
     # the regular SRL generator includes an extra null element at the front, so ignore that
+    
     seed = card['seed']
     card = card['objectives']
+    
     if len(card) == (size * size) + 1:
         card = card[1:]
     if len(card) != size * size:
         raise Exception("bad card length: " + str(len(card)) + ", card: " + str(card))
-    x = [{"name": goal.get("name", ""), "tier": goal.get("difficulty", "")} for goal in card]
+    x = [{"name": goal.get("name", ""), "tier": goal.get("difficulty", "") or -1} for goal in card]
     return seed, x

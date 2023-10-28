@@ -28,7 +28,7 @@ bingoGenerator = function(bingoList, opts) {
             }
         }
 
-        return bingoBoard;
+        return {"objectives": bingoBoard, "seed": SEED};
     }
 };
 

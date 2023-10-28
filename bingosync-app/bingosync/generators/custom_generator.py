@@ -37,6 +37,9 @@ def _validate_square(i, square):
 def _parse_simple_list(custom_board, game_type, size=5):
     if not isinstance(custom_board, list):
         raise InvalidBoardException('Board must be a list')
+    
+    if size==None:
+        size = 5
 
     if game_type == GameType.custom and len(custom_board) != size*size:
         raise InvalidBoardException(

@@ -175,7 +175,13 @@ class Game(models.Model):
             game.save()
             for index, square_json in enumerate(board_json):
                 slot = index + 1
-                square = Square(game=game, slot=slot, goal=square_json["name"], tier=square_json["tier"])
+
+                # hack to make tier work with non-SRL formats
+                tier = square_json.get("tier")
+                if tier == None:
+                    tier = -1
+                square = Square(game=game, slot=slot, goal=square_json["name"], tier=tier)
+
                 square.full_clean()
                 square.save()
         return game
