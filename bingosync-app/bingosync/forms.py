@@ -75,7 +75,7 @@ class RoomForm(forms.Form):
 
         custom_json = cleaned_data.get("custom_json", "")
         try:
-            cleaned_data["custom_board"] = generator.validate_custom_json(custom_json, size=cleaned_data['size'])
+            cleaned_data["custom_board"] = generator.validate_custom_json(custom_json, size=cleaned_data['size'] or 5)
         except InvalidBoardException as e:
             raise forms.ValidationError(e)
 
