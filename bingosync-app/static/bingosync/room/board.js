@@ -200,8 +200,9 @@ var Board = (function(){
 
     Board.prototype.checkTile = function(i, chosenColorClass) {
         var x = $.isEmptyObject(getSquareColors(this.squares[i].$square))
+
         if (!x) {
-            var x = squareHasColor(this.squares[i].$square, chosenColorClass)
+            var x = squareHasColor(this.squares[i].$square, chosenColorClass) || chosenColorClass === "undefinedsquare"
             if (x) {
                 return true;
             }
