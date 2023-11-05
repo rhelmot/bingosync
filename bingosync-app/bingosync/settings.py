@@ -32,7 +32,7 @@ DEBUG = not IS_PROD
 
 IS_TEST = len(sys.argv) > 1 and sys.argv[1] == "test"
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost", "celestebingo.rhelmot.io"]
+ALLOWED_HOSTS = ["127.0.0.1", "localhost", "celestebingo.rhelmot.io", "http://celestebingo.rhelmot.io", "https://celestebingo.rhelmot.io"]
 
 EMAIL_HOST = "localhost"
 EMAIL_PORT = 25
