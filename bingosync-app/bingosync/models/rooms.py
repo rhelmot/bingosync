@@ -57,14 +57,6 @@ class Room(models.Model):
             raise Http404
 
     @staticmethod
-    def get_listed_rooms():
-        active_rooms = Room.objects.filter(active=True)
-        # use -len(players) so that high numbers of players are at the top
-        # but otherwise names are sorted lexicographically descending
-        key = lambda room: (room.is_idle, -len(room.connected_players), room.name)
-        return sorted(active_rooms, key=key)
-
-    @staticmethod
     def get_with_multiple_players():
         return Room.objects.annotate(num_players=models.Count('player')).filter(num_players__gt=1)
 

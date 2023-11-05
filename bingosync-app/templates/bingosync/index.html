@@ -9,43 +9,10 @@
         <div class="col-md-7">
             <div id="rooms_panel" class="panel panel-default {{ hide_idle_rooms|yesno:"hide-idle-rooms," }}">
                 <div class="panel-heading">
-                    Active Rooms
+                    Global Stats
                 </div>
                 <div class="panel-body">
-                    {% if rooms %}
-                        <div class="table-wrapper" style="margin: 5px; border-radius: 5px">
-                            <table class="table">
-                                <thead>
-                                    <th>Room</th>
-                                    <th>Creator</th>
-                                    <th>Game</th>
-                                    <th>Players</th>
-                                </thead>
-                                <tbody>
-                                {% for room in rooms %}
-                                <tr class="{{ room.is_idle|yesno:"idle-room," }}">
-                                        <td><a href="{{ room.get_absolute_url }}">{{ room.name }}</a></td>
-                                        <td>{{ room.creator.name }}</td>
-                                        <td>{{ room.current_game.game_type|hovertext_game_type }}</td>
-                                        <td>{{ room.connected_players|length }}</td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                            <div>
-                                {% if hide_idle_rooms %}
-                                    <div class="text-center">
-                                        <a href="#" class="show-button">Show Idle Rooms</a>
-                                        <a href="#" class="hide-button">Hide Idle Rooms</a>
-                                    </div>
-                                {% endif %}
-                            </div>
-                        </div>
-                    {% else %}
-                        <div>
-                            No active rooms right now, why don't you make one?
-                        </div>
-                    {% endif %}
+                    There have been {{ stats.rooms }} rooms with {{ stats.games }} played in them. There have been {{ stats.ticks }} ticks and {{ stats.unticks }} unticks.
                 </div>
             </div>
         </div>
