@@ -282,6 +282,9 @@ var Board = (function(){
 
         for (let i = 0; i < json.length; i++) {
             this.squares[i].setJson(json[i]);
+
+            // allow newlines in generators
+            this.$squares[i].innerHTML = this.$squares[i].innerHTML.replaceAll("\n","<br>")
         }
         this.refitGoalText();
     };
