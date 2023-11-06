@@ -148,7 +148,7 @@ var Board = (function(){
                 slot++;
             }
         }
-        this.$board.append('<tr><td class="unselectable popout" id="bltr"></td></tr>');
+        this.$board.append('<tr><td class="unselectable popout" id="bltr">BL-TR</td></tr>');
 
         this.$squares = this.$board.find(".square");
         this.squares = [];

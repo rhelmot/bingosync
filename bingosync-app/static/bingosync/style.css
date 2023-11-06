@@ -318,7 +318,7 @@
 .board-cover {
     /* pin it over top of the board container */
     position: absolute;
-    left: 0px;
+    left: 2px;
     top: 0px;
     z-index: 1;
 
@@ -327,8 +327,8 @@
     margin-left: 31px;
 
     /* cover the board */
-    width: calc(100% - 31px);
-    height: calc(100% - 61px);
+    width: calc(100% - 34px);
+    height: calc(100% - 61.5px);
     background: #101821;
 
     /* helps align text */
