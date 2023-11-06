@@ -278,7 +278,7 @@
   ],
   [
     {
-      "name": "Huge Mess: Chest \u2193 Books \u2191 Towel \u2192",
+      "name": "Huge Mess: Chest \u2193 \n Books \u2191 \n Towel \u2192 \n",
       "types": [
         "huge_mess_pathing"
       ]
@@ -296,7 +296,7 @@
       ]
     },
     {
-      "name": "Huge Mess: Chest \u2193 Towel \u2192 Books \u2191",
+      "name": "Huge Mess: Chest \u2193 \n Towel \u2192 \n Books \u2191 \n",
       "types": [
         "huge_mess_pathing"
       ]
@@ -309,7 +309,7 @@
       ]
     },
     {
-      "name": "Huge Mess: Towel \u2192 Books \u2191 Chest \u2193",
+      "name": "Huge Mess: Towel \u2192 \n Books \u2191 \n Chest \u2193 \n",
       "types": [
         "huge_mess_pathing"
       ]
@@ -389,7 +389,7 @@
   ],
   [
     {
-      "name": "Huge Mess: Books \u2191 Towel \u2192 Chest \u2193",
+      "name": "Huge Mess: Books \u2191 \n Towel \u2192 \n Chest \u2193 \n",
       "types": [
         "huge_mess_pathing"
       ]
@@ -408,7 +408,7 @@
       ]
     },
     {
-      "name": "Huge Mess: Books \u2191 Chest \u2193 Towel \u2192",
+      "name": "Huge Mess: Books \u2191 \n Chest \u2193 \n Towel \u2192 \n",
       "types": [
         "huge_mess_pathing"
       ]
@@ -426,7 +426,7 @@
       ]
     },
     {
-      "name": "Huge Mess: Towel \u2192 Chest \u2193 Books \u2191",
+      "name": "Huge Mess: Towel \u2192 \n Chest \u2193 \n Books \u2191 \n",
       "types": [
         "huge_mess_pathing"
       ]

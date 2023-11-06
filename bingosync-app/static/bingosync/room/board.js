@@ -119,11 +119,11 @@ var Board = (function(){
         this.size = size;
         this.$board.html('');
         const top = $('<tr>').appendTo(this.$board);
-        top.append('<td class="unselectable popout" id="tlbr">TL-BR</td>');
+        top.append('<td class="unselectable popout" id="tlbr"></td>');
         for (let iCol = 0; iCol < size; iCol++) {
             $('<td class="unselectable popout"></td>')
                 .attr('id', 'col' + (iCol + 1).toString())
-                .text('COL' + (iCol + 1).toString())
+                .text(String.fromCharCode(iCol + 65))
                 .appendTo(top);
         }
         let slot = 1;
@@ -131,7 +131,7 @@ var Board = (function(){
             const row = $('<tr>').appendTo(this.$board);
             $('<td class="unselectable popout"></td>')
                 .attr('id', 'row' + (iRow + 1).toString())
-                .text('ROW' + (iRow + 1).toString())
+                .text((iRow + 1).toString())
                 .appendTo(row);
             for (let iCol = 0; iCol < size; iCol++) {
                 const td = $('<td class="unselectable square blanksquare tlbr"></td>')
@@ -148,7 +148,7 @@ var Board = (function(){
                 slot++;
             }
         }
-        this.$board.append('<tr><td class="unselectable popout" id="bltr">BL-TR</td></tr>');
+        this.$board.append('<tr><td class="unselectable popout" id="bltr"></td></tr>');
 
         this.$squares = this.$board.find(".square");
         this.squares = [];

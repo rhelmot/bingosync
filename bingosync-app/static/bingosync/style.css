@@ -232,6 +232,7 @@
     font-weight: 700;
     border: 1px #0a245a solid;
     border-left-width: 0;
+    height: 31px;
 }
 #bingo tr:first-child td:hover,
 #bingo tr:last-child td:hover {
@@ -246,6 +247,7 @@
     font-weight: 700;
     border: 1px #0a245a solid;
     border-top-width: 0;
+    width: 31px;
 }
 #bingo tr:first-child td:first-child {
     border-width:1px;
@@ -318,7 +320,7 @@
 .board-cover {
     /* pin it over top of the board container */
     position: absolute;
-    left: 2px;
+    left: -0.5px;
     top: 0px;
     z-index: 1;
 
@@ -327,8 +329,8 @@
     margin-left: 31px;
 
     /* cover the board */
-    width: calc(100% - 34px);
-    height: calc(100% - 61.5px);
+    width: calc(100% - 30px);
+    height: calc(100% - 62px);
     background: #101821;
 
     /* helps align text */
