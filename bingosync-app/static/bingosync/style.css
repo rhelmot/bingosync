@@ -187,8 +187,9 @@
 }
 
 .hiddentext {
+    font-size: 0;
     text-indent: 120%;
-    white-space: nowrap; 
+    white-space: nowrap;
 }
 
 /* square that is covered by a board cover, hides the goal text */
