@@ -1,7 +1,19 @@
 [
   [
     {
+      "name": "All Berries in Start of 1A (6)",
+      "types": [
+        "checkpoint_berries"
+      ]
+    },
+    {
       "name": "Get a 1-Up in 1A",
+      "types": [
+        "1up"
+      ]
+    },
+    {
+      "name": "Get a 1-Up in 2A",
       "types": [
         "1up"
       ]
@@ -13,27 +25,15 @@
       ]
     },
     {
-      "name": "Talk to Theo in Crossing",
-      "types": [
-        "cutscene"
-      ]
-    },
-    {
-      "name": "All Berries in Start of 1A (6)",
-      "types": [
-        "checkpoint_berries"
-      ]
-    },
-    {
-      "name": "Get a 1-Up in 2A",
-      "types": [
-        "1up"
-      ]
-    },
-    {
       "name": "Old Site Cassette",
       "types": [
         "cassette"
+      ]
+    },
+    {
+      "name": "Talk to Theo in Crossing",
+      "types": [
+        "cutscene"
       ]
     },
     {
@@ -55,25 +55,15 @@
       ]
     },
     {
-      "name": "Forsaken City Blue Heart",
-      "types": [
-        "blue_heart"
-      ]
-    },
-    {
-      "name": "Complete 1A Start without dashing",
-      "types": [
-        "task"
-      ]
-    },
-    {
-      "name": "Read the Poem in 2A",
-      "types": []
-    },
-    {
       "name": "All Berries in Chasm (5)",
       "types": [
         "checkpoint_berries"
+      ]
+    },
+    {
+      "name": "Forsaken City Blue Heart",
+      "types": [
+        "blue_heart"
       ]
     },
     {
@@ -83,43 +73,27 @@
       ]
     },
     {
-      "name": "Complete Chasm without dashing",
+      "name": "Dashless Start of 1A",
       "types": [
         "task"
       ]
+    },
+    {
+      "name": "Dashless Chasm",
+      "types": [
+        "task"
+      ]
+    },
+    {
+      "name": "Read the Poem in Awake",
+      "types": []
     }
   ],
   [
     {
-      "name": "Get a 1-Up in 2 Chapters",
-      "types": [
-        "1up",
-        "challenge"
-      ]
-    },
-    {
       "name": "10 Berries in 1A",
       "types": [
         "amount_berries"
-      ]
-    },
-    {
-      "name": "2 Cassettes",
-      "types": [
-        "cassette"
-      ]
-    },
-    {
-      "name": "Find Letter and PICO-8 in Huge Mess",
-      "types": [
-        "cutscene"
-      ]
-    },
-    {
-      "name": "Get a 1-Up in 3 Chapters",
-      "types": [
-        "1up",
-        "challenge"
       ]
     },
     {
@@ -135,14 +109,37 @@
       ]
     },
     {
+      "name": "Get a 1-Up in 2 Chapters",
+      "types": [
+        "1up"
+      ]
+    },
+    {
+      "name": "Get a 1-Up in 3 Chapters",
+      "types": [
+        "1up"
+      ]
+    },
+    {
       "name": "Get three 1-Ups",
       "types": [
-        "1up",
-        "challenge"
+        "1up"
+      ]
+    },
+    {
+      "name": "2 Cassettes",
+      "types": [
+        "cassette"
       ]
     },
     {
       "name": "2 optional Theo cutscenes",
+      "types": [
+        "cutscene"
+      ]
+    },
+    {
+      "name": "Read the Letter in Huge Mess",
       "types": [
         "cutscene"
       ]
@@ -162,7 +159,19 @@
       ]
     },
     {
+      "name": "Blue and Red Heart in Old Site",
+      "types": [
+        "b-side"
+      ]
+    },
+    {
       "name": "Grabless 1A",
+      "types": [
+        "grabless"
+      ]
+    },
+    {
+      "name": "Grabless 2A",
       "types": [
         "grabless"
       ]
@@ -174,22 +183,27 @@
       ]
     },
     {
+      "name": "25 Berries",
+      "types": [
+        "amount_berries"
+      ]
+    },
+    {
       "name": "All Berries in Intervention (8)",
       "types": [
         "checkpoint_berries"
       ]
     },
     {
-      "name": "Blue and Red Heart in Old Site",
+      "name": "All Berries in Crossing (9)",
       "types": [
-        "b-side"
+        "checkpoint_berries"
       ]
     },
     {
-      "name": "Complete Crossing without dashing",
+      "name": "Dashless Crossing",
       "types": [
-        "task",
-        "challenge"
+        "task"
       ]
     },
     {
@@ -197,24 +211,6 @@
       "types": [
         "1up",
         "progress"
-      ]
-    },
-    {
-      "name": "Grabless 2A",
-      "types": [
-        "grabless"
-      ]
-    },
-    {
-      "name": "25 Berries",
-      "types": [
-        "amount_berries"
-      ]
-    },
-    {
-      "name": "All Berries in Crossing (9)",
-      "types": [
-        "checkpoint_berries"
       ]
     },
     {
@@ -233,7 +229,7 @@
       ]
     },
     {
-      "name": "Complete Shrine without dashing",
+      "name": "Dashless Shrine",
       "types": [
         "task",
         "midgame"
@@ -278,10 +274,8 @@
   ],
   [
     {
-      "name": "Huge Mess: Chest \u2193 \n Books \u2191 \n Towel \u2192 \n",
-      "types": [
-        "huge_mess_pathing"
-      ]
+      "name": "Huge Mess: Chest \u2193 \n Books \u2191 \n Towel \u2192",
+      "types": []
     },
     {
       "name": "Blue and Red Heart in Forsaken City",
@@ -296,22 +290,14 @@
       ]
     },
     {
-      "name": "Huge Mess: Chest \u2193 \n Towel \u2192 \n Books \u2191 \n",
-      "types": [
-        "huge_mess_pathing"
-      ]
+      "name": "Huge Mess: Towel \u2192 \n Chest \u2193 \n Books \u2191",
+      "types": []
     },
     {
       "name": "2 Seeded Berries",
       "types": [
         "special_berries",
         "midgame"
-      ]
-    },
-    {
-      "name": "Huge Mess: Towel \u2192 \n Books \u2191 \n Chest \u2193 \n",
-      "types": [
-        "huge_mess_pathing"
       ]
     },
     {
@@ -342,7 +328,7 @@
       ]
     },
     {
-      "name": "Read Diary in Elevator Shaft",
+      "name": "Read the Diary in Elevator Shaft",
       "types": [
         "cutscene"
       ]
@@ -389,10 +375,8 @@
   ],
   [
     {
-      "name": "Huge Mess: Books \u2191 \n Towel \u2192 \n Chest \u2193 \n",
-      "types": [
-        "huge_mess_pathing"
-      ]
+      "name": "Huge Mess: Books \u2191 \n Towel \u2192 \n Chest \u2193",
+      "types": []
     },
     {
       "name": "Jump on 10 Snowballs",
@@ -408,10 +392,8 @@
       ]
     },
     {
-      "name": "Huge Mess: Books \u2191 \n Chest \u2193 \n Towel \u2192 \n",
-      "types": [
-        "huge_mess_pathing"
-      ]
+      "name": "Huge Mess: Books \u2191 \n Chest \u2193 \n Towel \u2192",
+      "types": []
     },
     {
       "name": "5 Keys",
@@ -423,12 +405,6 @@
       "name": "All Berries in Huge Mess (7)",
       "types": [
         "checkpoint_berries"
-      ]
-    },
-    {
-      "name": "Huge Mess: Towel \u2192 \n Chest \u2193 \n Books \u2191 \n",
-      "types": [
-        "huge_mess_pathing"
       ]
     },
     {
@@ -466,7 +442,7 @@
       ]
     },
     {
-      "name": "Find Theo\u0027s Phone in 5A",
+      "name": "Find Theo\u0027s Phone in Start of 5A",
       "types": [
         "cutscene",
         "progress"
@@ -732,7 +708,7 @@
     {
       "name": "Get 1 Key in Power Source",
       "types": [
-        "ch9",
+        "farewell",
         "keys"
       ]
     },
@@ -819,7 +795,7 @@
     {
       "name": "Get 2 Keys in Power Source",
       "types": [
-        "ch9",
+        "farewell",
         "keys"
       ]
     },
@@ -858,7 +834,7 @@
     {
       "name": "Use 5 Binoculars in Farewell",
       "types": [
-        "ch9",
+        "farewell",
         "binoculars"
       ]
     },
@@ -929,8 +905,7 @@
     {
       "name": "Get 15 Berries in PICO-8",
       "types": [
-        "pico-8",
-        "challenge"
+        "pico-8"
       ]
     },
     {
@@ -951,7 +926,7 @@
     {
       "name": "Get 3 Keys in Power Source",
       "types": [
-        "ch9",
+        "farewell",
         "keys"
       ]
     },
@@ -983,7 +958,7 @@
     {
       "name": "Get 4 Keys in Power Source",
       "types": [
-        "ch9",
+        "farewell",
         "keys"
       ]
     },
@@ -1057,7 +1032,7 @@
       "name": "Grabless Power Source",
       "types": [
         "grabless",
-        "ch9"
+        "farewell"
       ]
     }
   ],
@@ -1224,9 +1199,7 @@
     },
     {
       "name": "Winged Golden Berry",
-      "types": [
-        "challenge"
-      ]
+      "types": []
     },
     {
       "name": "All 4 optional Theo cutscenes",
@@ -1355,7 +1328,7 @@
     {
       "name": "Get 5 Keys in Power Source",
       "types": [
-        "ch9",
+        "farewell",
         "keys"
       ]
     },
@@ -1382,9 +1355,8 @@
     {
       "name": "Reach an Intro Car in Farewell",
       "types": [
-        "ch9",
-        "task",
-        "challenge"
+        "farewell",
+        "task"
       ]
     },
     {
@@ -1461,7 +1433,7 @@
     {
       "name": "Reach Event Horizon (FW Checkpoint)",
       "types": [
-        "ch9"
+        "farewell"
       ]
     },
     {
