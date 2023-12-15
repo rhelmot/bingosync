@@ -103,12 +103,6 @@
       ]
     },
     {
-      "name": "5 Berries in 3 Chapters",
-      "types": [
-        "x_berries_in_x"
-      ]
-    },
-    {
       "name": "Get a 1-Up in 2 Chapters",
       "types": [
         "1up"
@@ -174,18 +168,6 @@
       "name": "Grabless 2A",
       "types": [
         "grabless"
-      ]
-    },
-    {
-      "name": "20 Berries",
-      "types": [
-        "amount_berries"
-      ]
-    },
-    {
-      "name": "25 Berries",
-      "types": [
-        "amount_berries"
       ]
     },
     {
@@ -278,6 +260,10 @@
       "types": []
     },
     {
+      "name": "Huge Mess: Towel \u2192 \n Chest \u2193 \n Books \u2191",
+      "types": []
+    },
+    {
       "name": "Blue and Red Heart in Forsaken City",
       "types": [
         "b-side"
@@ -288,10 +274,6 @@
       "types": [
         "blue_heart"
       ]
-    },
-    {
-      "name": "Huge Mess: Towel \u2192 \n Chest \u2193 \n Books \u2191",
-      "types": []
     },
     {
       "name": "2 Seeded Berries",
@@ -379,10 +361,13 @@
       "types": []
     },
     {
-      "name": "Jump on 10 Snowballs",
+      "name": "Huge Mess: Books \u2191 \n Chest \u2193 \n Towel \u2192",
+      "types": []
+    },
+    {
+      "name": "All Berries in Huge Mess (7)",
       "types": [
-        "progress",
-        "task"
+        "checkpoint_berries"
       ]
     },
     {
@@ -392,8 +377,18 @@
       ]
     },
     {
-      "name": "Huge Mess: Books \u2191 \n Chest \u2193 \n Towel \u2192",
-      "types": []
+      "name": "All Berries in Cliff Face (5)",
+      "types": [
+        "checkpoint_berries",
+        "progress"
+      ]
+    },
+    {
+      "name": "Jump on 10 Snowballs",
+      "types": [
+        "progress",
+        "task"
+      ]
     },
     {
       "name": "5 Keys",
@@ -402,22 +397,9 @@
       ]
     },
     {
-      "name": "All Berries in Huge Mess (7)",
-      "types": [
-        "checkpoint_berries"
-      ]
-    },
-    {
       "name": "Grabless Cliff Face",
       "types": [
         "grabless",
-        "progress"
-      ]
-    },
-    {
-      "name": "All Berries in Cliff Face (5)",
-      "types": [
-        "checkpoint_berries",
         "progress"
       ]
     }
@@ -442,9 +424,22 @@
       ]
     },
     {
+      "name": "3 Seeded Berries",
+      "types": [
+        "special_berries"
+      ]
+    },
+    {
       "name": "Find Theo\u0027s Phone in Start of 5A",
       "types": [
         "cutscene",
+        "progress"
+      ]
+    },
+    {
+      "name": "Mirror Temple Cassette",
+      "types": [
+        "cassette",
         "progress"
       ]
     },
@@ -458,19 +453,6 @@
       "name": "5 Berries in 5 Chapters",
       "types": [
         "x_berries_in_x"
-      ]
-    },
-    {
-      "name": "3 Seeded Berries",
-      "types": [
-        "special_berries"
-      ]
-    },
-    {
-      "name": "Mirror Temple Cassette",
-      "types": [
-        "cassette",
-        "progress"
       ]
     }
   ],
@@ -551,6 +533,12 @@
       ]
     },
     {
+      "name": "Use 6 Binoculars in B-Sides",
+      "types": [
+        "binoculars"
+      ]
+    },
+    {
       "name": "Get 10 Berries in PICO-8",
       "types": [
         "pico-8"
@@ -588,12 +576,6 @@
       ]
     },
     {
-      "name": "Use 6 Binoculars in B-Sides",
-      "types": [
-        "binoculars"
-      ]
-    },
-    {
       "name": "2 Keys in 2 Chapters",
       "types": [
         "keys"
@@ -608,6 +590,18 @@
     }
   ],
   [
+    {
+      "name": "All Berries in Start of 3A (11)",
+      "types": [
+        "checkpoint_berries"
+      ]
+    },
+    {
+      "name": "All Berries in Shrine (9)",
+      "types": [
+        "checkpoint_berries"
+      ]
+    },
     {
       "name": "All Berries in Start of 5A (12)",
       "types": [
@@ -628,12 +622,6 @@
       ]
     },
     {
-      "name": "All Berries in Start of 3A (11)",
-      "types": [
-        "checkpoint_berries"
-      ]
-    },
-    {
       "name": "Mirror Temple Blue Heart",
       "types": [
         "blue_heart"
@@ -644,12 +632,6 @@
       "types": [
         "task",
         "progress"
-      ]
-    },
-    {
-      "name": "All Berries in Shrine (9)",
-      "types": [
-        "checkpoint_berries"
       ]
     },
     {
