@@ -144,7 +144,7 @@ class CustomGenerator:
 
         if self.game_type in (GameType.custom, GameType.custom_randomized):
             return _parse_simple_list(custom_board, self.game_type, size=size)
-        elif self.game_type == GameType.custom_srl_v5:
+        elif self.game_type in (GameType.custom_srl_v5, GameType.custom_ccomm):
             return _parse_srl_v5_list(custom_board, size=size)
         elif self.game_type == GameType.custom_isaac:
             return _parse_isaac_list(custom_board)
@@ -154,7 +154,7 @@ class CustomGenerator:
     def get_card(self, seed, custom_board=None, size=5):
         if self.game_type == GameType.custom:
             return seed, custom_board
-        elif self.game_type in (GameType.custom_randomized, GameType.custom_srl_v5, GameType.custom_isaac):
+        elif self.game_type in (GameType.custom_randomized, GameType.custom_srl_v5, GameType.custom_isaac, GameType.custom_ccomm):
             return BingoGenerator.instance(str(self.game_type.name)).get_card(seed, custom_board, size)
 
         raise Exception('Unrecognized custom game type: {}'.format(self.game_type))

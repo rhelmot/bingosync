@@ -363,6 +363,7 @@ class GameType(Enum):
     celeste_extensions = 359
     celeste_blackout_solo = 360
     celeste_cheat_mode = 361
+    custom_ccomm = 362
 
 
     def __str__(self):
@@ -394,7 +395,7 @@ class GameType(Enum):
 
     @property
     def is_custom(self):
-        return self in (GameType.custom, GameType.custom_randomized, GameType.custom_srl_v5, GameType.custom_isaac)
+        return self in (GameType.custom, GameType.custom_randomized, GameType.custom_srl_v5, GameType.custom_isaac, GameType.custom_ccomm)
 
     @property
     def uses_seed(self):
@@ -538,6 +539,7 @@ MANUAL_GAME_GROUPS = {
     GameType.custom: {
         "name": "Custom (Advanced)",
         "variants": [
+            (GameType.custom_ccomm, "CComm v1", "Custom (CComm)"),
             (GameType.custom, "Fixed Board", "Custom"),
             (GameType.custom_randomized, "Randomized", "Custom (Rand)"),
             (GameType.custom_srl_v5, "SRL v5", "Custom (SRLv5)"),
