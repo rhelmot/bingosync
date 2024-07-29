@@ -87,11 +87,17 @@
     {
       "name": "Read the Poem in Awake",
       "types": []
+    },
+    {
+      "name": "Grabless 2A",
+      "types": [
+        "grabless"
+      ]
     }
   ],
   [
     {
-      "name": "10 Berries in 1A",
+      "name": "12 Berries in 1A",
       "types": [
         "amount_berries"
       ]
@@ -160,12 +166,6 @@
     },
     {
       "name": "Grabless 1A",
-      "types": [
-        "grabless"
-      ]
-    },
-    {
-      "name": "Grabless 2A",
       "types": [
         "grabless"
       ]
@@ -699,6 +699,12 @@
       "types": [
         "3b"
       ]
+    },
+    {
+      "name": "8 Keys",
+      "types": [
+        "keys"
+      ]
     }
   ],
   [
@@ -1065,7 +1071,7 @@
       ]
     },
     {
-      "name": "Grabless Rock Bottom",
+      "name": "Grabless Rock Bottom (6A/6B Checkpoint)",
       "types": [
         "grabless"
       ]
@@ -1181,7 +1187,9 @@
     },
     {
       "name": "Winged Golden Berry",
-      "types": []
+      "types": [
+        "task"
+      ]
     },
     {
       "name": "All 4 optional Theo cutscenes",
@@ -1231,6 +1239,12 @@
     },
     {
       "name": "5 Keys in 2 Chapters",
+      "types": [
+        "keys"
+      ]
+    },
+    {
+      "name": "12 Keys",
       "types": [
         "keys"
       ]
@@ -1391,7 +1405,7 @@
       ]
     },
     {
-      "name": "All Flags in 3000M",
+      "name": "All Flags in 3000M (7A/7B Checkpoint)",
       "types": [
         "lategame",
         "task"
