@@ -18,10 +18,10 @@ from bingosync.forms import RoomForm, JoinRoomForm, GoalListConverterForm
 from bingosync.models.colors import Color
 from bingosync.models.game_type import GameType, ALL_VARIANTS
 from bingosync.models.events import Event, ChatEvent, GoalEvent, RevealedEvent, ConnectionEvent, NewCardEvent
-from bingosync.models.rooms import Room, Game, LockoutMode, Player
+from bingosync.models.rooms import ANON_PLAYER, Room, Game, LockoutMode, Player
 from bingosync.publish import publish_goal_event, publish_chat_event, publish_color_event, publish_revealed_event
 from bingosync.publish import publish_connection_event, publish_new_card_event
-from bingosync.util import generate_encoded_uuid
+from bingosync.util import generate_encoded_uuid, ANON_UUID, encode_uuid
 
 from crispy_forms.layout import Layout, Field
 
@@ -114,6 +114,16 @@ def room_view(request, encoded_room_uuid):
         if 'password' in request.GET:
             join_form.initial['passphrase'] = request.GET['password']
         return _join_room(request, join_form, room)
+
+def room_stream(request, encoded_room_uuid):
+    room = Room.get_for_encoded_uuid_or_404(encoded_room_uuid)
+    params = {
+        "room": room,
+        "game": room.current_game,
+        "sockets_url": SOCKETS_URL,
+        "temporary_socket_key": _create_anon_socket_key(room)
+    }
+    return render(request, "bingosync/stream.html", params)
 
 def _join_room(request, join_form, room):
     params = {
@@ -346,25 +356,32 @@ def get_socket_key(request, encoded_room_uuid):
 @csrf_exempt
 def user_connected(request, encoded_player_uuid):
     player = Player.get_for_encoded_uuid(encoded_player_uuid)
-    connection_event = ConnectionEvent.atomically_connect(player)
-    publish_connection_event(connection_event)
+    if player is not ANON_PLAYER:
+        connection_event = ConnectionEvent.atomically_connect(player)
+        publish_connection_event(connection_event)
     return HttpResponse()
 
 # TODO: add authentication to limit this route to tornado
 @csrf_exempt
 def user_disconnected(request, encoded_player_uuid):
     player = Player.get_for_encoded_uuid(encoded_player_uuid)
-    connection_event = ConnectionEvent.atomically_disconnect(player)
-    publish_connection_event(connection_event)
+    if player is not ANON_PLAYER:
+        connection_event = ConnectionEvent.atomically_disconnect(player)
+        publish_connection_event(connection_event)
     return HttpResponse()
 
 # TODO: add authentication to limit this route to tornado
 def check_socket_key(request, socket_key):
     try:
-        encoded_player_uuid = _get_temporary_socket_player_uuid(socket_key)
-        player = Player.get_for_encoded_uuid(encoded_player_uuid)
+        kind, encoded_player_uuid = _get_temporary_socket_player_uuid(socket_key)
+        if kind == "room":
+            player = ANON_PLAYER
+            room = Room.get_for_encoded_uuid(encoded_player_uuid)
+        else:
+            player = Player.get_for_encoded_uuid(encoded_player_uuid)
+            room = player.room
         json_response = {
-            "room": player.room.encoded_uuid,
+            "room": room.encoded_uuid,
             "player": player.encoded_uuid
         }
         return JsonResponse(json_response)
@@ -437,8 +454,16 @@ def _save_session_player(session, player):
 
 def _create_temporary_socket_key(player):
     temporary_socket_key = generate_encoded_uuid()
-    cache.set(temporary_socket_key, player.encoded_uuid)
+    uuid = player.encoded_uuid
+    cache.set(temporary_socket_key, ("player", uuid))
     return temporary_socket_key
+
+def _create_anon_socket_key(room):
+    temporary_socket_key = generate_encoded_uuid()
+    uuid = room.encoded_uuid
+    cache.set(temporary_socket_key, ("room", uuid))
+    return temporary_socket_key
+
 
 def _get_temporary_socket_player_uuid(temporary_socket_key):
     encoded_player_uuid = cache.get(temporary_socket_key)

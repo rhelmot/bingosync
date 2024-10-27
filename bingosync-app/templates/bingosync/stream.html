@@ -1,0 +1,53 @@
+{% extends "bingosync/base.html" %}
+{% load static %}
+{% load app_filters %}
+
+<!-- bingosync.html doesn't use the same layout conventiona s the rest of the
+     site because the main layout flexboxes screw with the fill-parent based
+     layout that the chat and sidebar use
+ -->
+{% block page_body %}
+<div class="container" style="height: 97vh">
+    <div class="row m-b-l" style="height: calc(100% - 70px);">
+        <div class="col-md-6">
+            <div class="fill-parent" style="text-align: center">
+                <div class="board-container">
+                    {% include 'bingosync/board.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{% static "bingosync/room/util.js" %}"></script>
+<script src="{% static "bingosync/room/board.js" %}"></script>
+<script src="{% static "bingosync/room/chat_socket.js" %}"></script>
+<script src="{% static "bingosync/bingosync.js" %}"></script>
+<script>
+    $(document).ready(function() {
+        ROOM_SETTINGS = JSON.parse('{{ room.settings|jsonify|escapejs }}');
+        var player = JSON.parse('{{ player.to_json|jsonify|escapejs }}');
+        window.sessionStorage.setItem("room", "{{ room.encoded_uuid }}");
+
+        var boardUrl = "{% url 'room_board' room.encoded_uuid %}";
+        var socketsUrl = "{{ sockets_url }}/broadcast";
+        var roomSettingsUrl = "{% url 'room_settings' room.encoded_uuid %}";
+        var temporarySocketKey = "{{ temporary_socket_key }}";
+
+        // Construct all of the UI components
+        var board = new Board($("#bingo"), player, null, boardUrl, null, ROOM_SETTINGS.fog_of_war);
+
+        var chatSocket = new ChatSocket(null, board, null, socketsUrl);
+
+        // hacky callback to trigger an update of the playersPanel counters (& highlighter) whenever we update the board.
+        // initialize magic global hack hooks
+        refreshBoard = function () {
+            board.reloadBoard();
+        };
+        window.addEventListener('resize', function() { board.refitGoalText(); }, false);
+
+        // Load in all of the actual data
+        board.reloadBoard();
+        chatSocket.init(temporarySocketKey);
+    });
+</script>
+{% endblock %}

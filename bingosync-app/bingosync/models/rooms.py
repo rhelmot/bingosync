@@ -12,7 +12,7 @@ import urllib.parse
 from bingosync.models.game_type import GameType
 from bingosync.models.colors import Color, CompositeColor
 from bingosync.models.events import Event, GoalEvent, ColorEvent, RevealedEvent, ConnectionEventType, ConnectionEvent
-from bingosync.util import encode_uuid, decode_uuid
+from bingosync.util import ANON_UUID, encode_uuid, decode_uuid
 
 
 STALE_THRESHOLD = datetime.timedelta(minutes=90)
@@ -268,6 +268,8 @@ class Player(models.Model):
     @staticmethod
     def get_for_encoded_uuid(encoded_player_uuid):
         decoded_uuid = decode_uuid(encoded_player_uuid)
+        if decoded_uuid == ANON_UUID:
+            return ANON_PLAYER
         return Player.objects.get(uuid=decoded_uuid)
 
     def __str__(self):
@@ -306,3 +308,5 @@ class Player(models.Model):
             "color": self.color.name,
             "is_spectator": self.is_spectator
         }
+
+ANON_PLAYER = Player(uuid=ANON_UUID, name="Anonymous", is_spectator=True)

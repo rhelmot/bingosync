@@ -17,3 +17,5 @@ def decode_uuid(encoded_uuid):
 
 def generate_encoded_uuid():
     return encode_uuid(uuid.uuid4())
+
+ANON_UUID = uuid.UUID("ec832ac3-e151-47da-aec3-3350563b25ba")
