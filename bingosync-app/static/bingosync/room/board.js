@@ -134,7 +134,7 @@ var Board = (function(){
                 .text((iRow + 1).toString())
                 .appendTo(row);
             for (let iCol = 0; iCol < size; iCol++) {
-                const td = $('<td class="unselectable square blanksquare tlbr"></td>')
+                const td = $('<td class="unselectable square blanksquare"></td>')
                     .addClass('row' + (iRow + 1).toString())
                     .addClass('col' + (iCol + 1).toString())
                     .attr('id', 'slot' + slot);
