@@ -6,14 +6,13 @@ from tornado.httpclient import AsyncHTTPClient
 from collections import defaultdict
 import datetime
 import json
-import random
 import requests
 import pprint
 import os
 
 IS_PROD = os.getenv('DEBUG', '').lower() not in ('1', 'yes')
 
-BASE_DJANGO_URL = "http://celestebingo.rhelmot.io/" if IS_PROD else "http://localhost:8000/"
+BASE_DJANGO_URL = f"http://{os.environ['DOMAIN']}/" if IS_PROD else "http://localhost:8000/"
 BASE_API_URL = BASE_DJANGO_URL + "api/"
 
 SOCKET_VERIFICATION_URL = BASE_API_URL + "socket/"

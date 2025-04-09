@@ -69,3 +69,4 @@ dumps/
 lbingosync.scpt
 bingosync-app/tools
 *.sqlite
+/static/

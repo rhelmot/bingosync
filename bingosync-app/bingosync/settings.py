@@ -32,8 +32,11 @@ DEBUG = not IS_PROD
 
 IS_TEST = len(sys.argv) > 1 and sys.argv[1] == "test"
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost", "celestebingo.rhelmot.io"]
-CSRF_TRUSTED_ORIGINS = ["https://celestebingo.rhelmot.io", "http://celestebingo.rhelmot.io"]
+ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+CSRF_TRUSTED_ORIGINS = []
+if IS_PROD:
+    ALLOWED_HOSTS.append(os.environ["DOMAIN"])
+    CSRF_TRUSTED_ORIGINS = [f"https://{os.environ["DOMAIN"]}", f"http://{os.environ["DOMAIN"]}"]
 
 EMAIL_HOST = "localhost"
 EMAIL_PORT = 25
@@ -216,14 +219,13 @@ STATICFILES_DIRS = (
   os.path.join(BASE_DIR, 'static/'),
 )
 
-STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static')
+STATIC_ROOT = os.getenv("STATIC_ROOT", os.path.join(os.path.dirname(BASE_DIR), 'static'))
 
 
 INTERNAL_SOCKETS_URL = "127.0.0.1:8888"
-PUBLIC_SOCKETS_URL = "sockets-celestebingo.rhelmot.io"
 
 if IS_PROD:
-    SOCKETS_URL = "wss://" + PUBLIC_SOCKETS_URL
+    SOCKETS_URL = "wss://" + os.environ["SOCKETS_DOMAIN"]
 else:
     SOCKETS_URL = "ws://" + INTERNAL_SOCKETS_URL
 
