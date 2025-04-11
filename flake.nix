@@ -129,7 +129,7 @@
               serviceConfig = {
                 User = cfg.user;
                 RuntimeDirectory = "bingosync";
-                WorkingDirectory = ./bingosync-app;
+                WorkingDirectory = "${./bingosync-app}";
               };
             };
             systemd.services.bingosync-ws = {
