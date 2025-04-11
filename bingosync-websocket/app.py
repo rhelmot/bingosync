@@ -2,17 +2,30 @@ import tornado.ioloop
 import tornado.web
 import tornado.websocket
 from tornado.httpclient import AsyncHTTPClient
+from tornado.httpserver import HTTPServer
+from tornado.netutil import bind_unix_socket, Resolver
+import urllib.parse
 
 from collections import defaultdict
+import traceback
 import datetime
 import json
 import requests
 import pprint
 import os
+import socket
+
+import requests_unixsocket
+requests_unixsocket.monkeypatch()
 
 IS_PROD = os.getenv('DEBUG', '').lower() not in ('1', 'yes')
+PORT = int(os.getenv('WS_PORT', '8888'))
+SOCK = os.getenv('WS_SOCK', None)
 
-BASE_DJANGO_URL = f"http://{os.environ['DOMAIN']}/" if IS_PROD else "http://localhost:8000/"
+if 'HTTP_SOCK' in os.environ:
+    BASE_DJANGO_URL = f"http+unix://{urllib.parse.quote_plus(os.environ['HTTP_SOCK'])}/"
+else:
+    BASE_DJANGO_URL = f"http://{os.environ['DOMAIN']}/" if IS_PROD else "http://localhost:8000/"
 BASE_API_URL = BASE_DJANGO_URL + "api/"
 
 SOCKET_VERIFICATION_URL = BASE_API_URL + "socket/"
@@ -28,8 +41,33 @@ DEFAULT_RETRY_COUNT = 5
 # whether we should clean up the broadcast sockets dictionary as people disconnect
 CLEANUP_SOCKETS_DICT_ON_DISCONNECT = True
 
+# https://lovelace.cluster.earlham.edu/mounts/lovelace/software/anaconda3/envs/qiime2-amplicon-2024.2/lib/python3.8/site-packages/jupyter_server/utils.py
+class UnixSocketResolver(Resolver):
+    """A resolver that routes HTTP requests to unix sockets
+    in tornado HTTP clients.
+    Due to constraints in Tornados' API, the scheme of the
+    must be `http` (not `http+unix`). Applications should replace
+    the scheme in URLS before making a request to the HTTP client.
+    """
+
+    def initialize(self, resolver):
+        self.resolver = resolver
+
+    def close(self):
+        self.resolver.close()
+
+    async def resolve(self, host, port, *args, **kwargs):
+        if '%2F' in host:
+            return [(socket.AF_UNIX, urllib.parse.unquote_plus(host))]
+        else:
+            return self.resolver.resolve(host, port, *args, **kwargs)
+resolver = UnixSocketResolver(resolver=Resolver())
+AsyncHTTPClient.configure(None, resolver=resolver)
+
+headers = {'Host': os.environ['DOMAIN'] if IS_PROD else 'localhost'}
+
 def load_player_data(socket_key):
-    response = requests.get(SOCKET_VERIFICATION_URL + socket_key)
+    response = requests.get(SOCKET_VERIFICATION_URL + socket_key, headers=headers)
     response_json = response.json()
     room_uuid = response_json["room"]
     player_uuid = response_json["player"]
@@ -52,7 +90,7 @@ def ping_with_retry(url, retry_count=DEFAULT_RETRY_COUNT):
         print("Ran out of retries, for url '" + url + "', giving up.")
 
     client = AsyncHTTPClient()
-    client.fetch(url, retry_callback)
+    client.fetch(url.replace('http+unix://', 'http://'), retry_callback, headers=headers)
 
 def format_defaultdict(ddict):
     if isinstance(ddict, defaultdict):
@@ -187,8 +225,9 @@ class BroadcastWebSocket(tornado.websocket.WebSocketHandler):
             socket_key = message_dict["socket_key"]
             room_uuid, player_uuid = load_player_data(socket_key)
             ROUTER.register(room_uuid, player_uuid, self)
-        except:
-            self.send('{"type": "error", "error": "unable to authenticate, try refreshing"}')
+        except Exception as e:
+            traceback.print_exc()
+            self.send(json.dumps({"type": "error", "error": "unable to authenticate, try refreshing", "exception": str(e)}))
 
     def on_close(self):
         ROUTER.unregister(self)
@@ -199,7 +238,6 @@ application = tornado.web.Application([
     (r"/broadcast", BroadcastWebSocket)
 ])
 
-PORT = 8888
 
 def periodic_ping():
     ROUTER.ping_all()
@@ -207,8 +245,14 @@ def periodic_ping():
 
 if __name__ == "__main__":
     print("Starting application!")
-    print("Listening on port: " + str(PORT))
-    application.listen(PORT)
+    if SOCK is None:
+        print("Listening on port: " + str(PORT))
+        application.listen(PORT)
+    else:
+        print("Listening on socket: " + str(SOCK))
+        server = HTTPServer(application)
+        mysock = bind_unix_socket(SOCK, mode=0o666)
+        server.add_socket(mysock)
     io_loop = tornado.ioloop.IOLoop.current()
     pinger = tornado.ioloop.PeriodicCallback(periodic_ping, PING_PERIOD_MILLIS)
     pinger.start()

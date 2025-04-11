@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 import sys
+import urllib.parse
 import dj_database_url
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -34,9 +35,11 @@ IS_TEST = len(sys.argv) > 1 and sys.argv[1] == "test"
 
 ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 CSRF_TRUSTED_ORIGINS = []
-if IS_PROD:
+if "DOMAIN" in os.environ:
     ALLOWED_HOSTS.append(os.environ["DOMAIN"])
     CSRF_TRUSTED_ORIGINS = [f"https://{os.environ["DOMAIN"]}", f"http://{os.environ["DOMAIN"]}"]
+if "HTTP_SOCK" in os.environ:
+    ALLOWED_HOSTS.append(urllib.parse.quote_plus(os.environ['HTTP_SOCK']))
 
 EMAIL_HOST = "localhost"
 EMAIL_PORT = 25
@@ -51,9 +54,9 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'bootstrapform',
     'crispy_forms',
-    'url_tools',
+    'bootstrap3',
+    'crispy_bootstrap3',
     'bingosync'
 )
 
@@ -85,7 +88,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'url_tools.context_processors.current_url',
                 'bingosync.context_processors.stubtag',
             ],
         },
@@ -119,8 +121,6 @@ USE_TZ = True
 
 # Logging
 # https://docs.djangoproject.com/en/1.8/topics/logging/
-LOG_DIR_ROOT = os.path.join(BASE_DIR, "logs")
-MAX_LOG_FILE_SIZE = 10 * (1024 ** 2)
 
 LOGGING = {
     'version': 1,
@@ -140,51 +140,19 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'simple',
         },
-        'info_log': {
-            'level': 'INFO',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(LOG_DIR_ROOT, 'info.log'),
-            'mode': 'a',
-            'maxBytes': MAX_LOG_FILE_SIZE,
-            'backupCount': 3,
-            'formatter': 'verbose',
-        },
-        'warn_log': {
-            'level': 'WARNING',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(LOG_DIR_ROOT, 'warn.log'),
-            'mode': 'a',
-            'maxBytes': MAX_LOG_FILE_SIZE,
-            'backupCount': 3,
-            'formatter': 'verbose',
-        },
-        'error_log': {
-            'level': 'ERROR',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(LOG_DIR_ROOT, 'error.log'),
-            'mode': 'a',
-            'maxBytes': MAX_LOG_FILE_SIZE,
-            'backupCount': 3,
-            'formatter': 'verbose',
-        },
-        'mail_admins': {
-            'level': 'ERROR',
-            'class': 'django.utils.log.AdminEmailHandler',
-            'include_html': True,
-        },
     },
     'loggers': {
         'django': {
-            'handlers': ['console', 'info_log', 'warn_log', 'error_log', 'mail_admins'],
+            'handlers': ['console'],
             'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
         },
         'django.server': {
-            'handlers': ['console', 'info_log', 'warn_log', 'error_log', 'mail_admins'],
+            'handlers': ['console'],
             'level': os.getenv('DJANGO_LOG_LEVEL', 'ERROR'),
             'propagate': False,
         },
         'bingosync': {
-            'handlers': ['console', 'info_log', 'warn_log', 'error_log', 'mail_admins'],
+            'handlers': ['console'],
             'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
         },
     },
@@ -225,12 +193,15 @@ STATIC_ROOT = os.getenv("STATIC_ROOT", os.path.join(os.path.dirname(BASE_DIR), '
 INTERNAL_SOCKETS_URL = "127.0.0.1:8888"
 
 if IS_PROD:
-    SOCKETS_URL = "wss://" + os.environ["SOCKETS_DOMAIN"]
+    SOCKETS_URL = "wss://" + os.getenv("SOCKETS_DOMAIN", INTERNAL_SOCKETS_URL)
 else:
-    SOCKETS_URL = "ws://" + INTERNAL_SOCKETS_URL
+    SOCKETS_URL = "ws://" + os.getenv("SOCKETS_DOMAIN", INTERNAL_SOCKETS_URL)
 
 # used for publishing events from django to tornado, so can always go across localhost
-SOCKETS_PUBLISH_URL = "http://" + INTERNAL_SOCKETS_URL
+if "WS_SOCK" in os.environ:
+    SOCKETS_PUBLISH_URL = f"http+unix://{urllib.parse.quote_plus(os.environ['WS_SOCK'])}"
+else:
+    SOCKETS_PUBLISH_URL = "http://" + INTERNAL_SOCKETS_URL
 
 
 # crispy forms confiuguration

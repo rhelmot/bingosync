@@ -1,0 +1,2 @@
+import requests_unixsocket
+requests_unixsocket.monkeypatch()
