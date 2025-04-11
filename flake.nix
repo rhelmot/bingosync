@@ -107,7 +107,7 @@
                 {
                   DOMAIN = cfg.domain;
                   SOCKETS_DOMAIN = cfg.socketsDomain;
-                  DB_STRING = cfg.databaseUrl;
+                  DB_STRING = builtins.replaceStrings ["%"] ["%%"] cfg.databaseUrl;
                   STATIC_ROOT = cfg.staticPath;
                   WS_SOCK = cfg.wsSocket;
                   HTTP_SOCK = cfg.httpSocket;
@@ -117,15 +117,13 @@
                 };
               wantedBy = [ "multi-user.target" ];
               requires = [ "bingosync-ws.service" ];
-              preStart = ''
+              script = ''
                 if ! [[ -f /var/lib/bingosync/secret ]]; then
                   (umask 077; head /dev/urandom | md5sum | cut -d' ' -f1 >/var/lib/bingosync/secret)
                 fi
                 export SECRET_KEY="$(cat /var/lib/bingosync/secret)"
                 python manage.py collectstatic --noinput
                 python manage.py migrate
-              '';
-              script = ''
                 gunicorn --bind unix:${cfg.httpSocket} --umask 0o111 --threads ${builtins.toString cfg.threads} --capture-output bingosync.wsgi:application
               '';
               serviceConfig = {
