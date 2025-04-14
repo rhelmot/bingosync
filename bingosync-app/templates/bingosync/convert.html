@@ -1,6 +1,7 @@
 {% extends "bingosync/base.html" %}
 {% load static %}
 {% load bootstrap3 %}
+{% load crispy_forms_tags %}
 
 {% block page_content %}
     <!-- I know this page has terrible CSS, come at me bro -->
@@ -26,7 +27,7 @@
                 </div>
                 <form class="form-horizontal" action="{% url 'goal_converter' %}" method="post">
                     {% csrf_token %}
-                    {{ crispy form }}
+                    {% crispy form %}
                     <div class="form-group">
                         <div class="col-md-4 pull-right">
                             <input type="submit" class="form-control" value="Convert and Download" />

@@ -126,6 +126,15 @@ class JoinRoomForm(forms.Form):
     passphrase = forms.CharField(label="Password", widget=forms.PasswordInput(render_value=True))
     is_spectator = forms.BooleanField(label="Join as Spectator", required=False)
 
+    def __init__(self, *args, **kwargs):
+        super(JoinRoomForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.form_tag = False
+
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-md-3'
+        self.helper.field_class = 'col-md-9'
+
     @staticmethod
     def for_room(room):
         initial_values = {
@@ -166,6 +175,15 @@ class JoinRoomForm(forms.Form):
 
 class GoalListConverterForm(forms.Form):
     spreadsheet_url = forms.CharField(label="Spreadsheet URL")
+
+    def __init__(self, *args, **kwargs):
+        super(GoalListConverterForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.form_tag = False
+
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-md-3'
+        self.helper.field_class = 'col-md-9'
 
     @staticmethod
     def get():
