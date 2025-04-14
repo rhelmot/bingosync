@@ -1,17 +1,21 @@
 {% extends "bingosync/base.html" %}
 {% load static %}
 {% load bootstrap3 %}
-{% load urls %}
 {% load app_filters %}
 
 {% block page_content %}
     <div class="panel panel-default">
         <div class="panel-heading">
             History
-            <a class="pull-right" href="{% toggle_params request.get_full_path hide_solo='true' %}"
-               title="{{ hide_solo|yesno:"Show,Hide" }} rooms with only one player">
-                {{ hide_solo|yesno:"Show,Hide" }} Solo Rooms
-            </a>
+            <div class="pull-right">
+                <a href="{% url 'history' %}?hide_solo=false" title="Show rooms with only one player">
+                    Show Solo Rooms
+                </a>
+                -
+                <a href="{% url 'history' %}?hide_solo=true" title="Hide rooms with only one player">
+                    Hide Solo Rooms
+                </a>
+            </div>
         </div>
         <div class="panel-body">
             {% if rooms %}
@@ -47,9 +51,9 @@
                     <span class="pull-left">
                         {% if rooms.has_previous %}
                             <a class="btn btn-primary"
-                               href="{% add_params request.get_full_path page=1 %}">|&lt;</a>
+                                href="{% url 'history' %}?page=1&hide_solo={{ rooms.hide_solo }}">|&lt;</a>
                             <a class="btn btn-primary"
-                               href="{% add_params request.get_full_path page=rooms.previous_page_number %}">&lt;</a>
+                                href="{% url 'history' %}?page={{ rooms.number|add:"-1" }}&hide_solo={{ rooms.hide_solo }}">&lt;</a>
                         {% else %}
                             <span class="btn hidden">&lt;</span>
                         {% endif %}
@@ -62,9 +66,9 @@
                     <span class="pull-right">
                         {% if rooms.has_next %}
                             <a class="btn btn-primary"
-                               href="{% add_params request.get_full_path page=rooms.next_page_number %}">&gt;</a>
+                        href="{% url 'history' %}?page={{ page|add:"1" }}&hide_solo={{ rooms.hide_solo }}">&gt;</a>
                             <a class="btn btn-primary"
-                               href="{% add_params request.get_full_path page=rooms.paginator.num_pages %}">&gt;|</a>
+                        href="{% url 'history' %}?page={{ rooms.paginator.num_pages }}&hide_solo={{ rooms.hide_solo }}">&gt;|</a>
                         {% else %}
                             <span class="btn hidden">&gt;</span>
                         {% endif %}
@@ -72,7 +76,7 @@
                 </div>
             {% else %}
                 <div>
-                    No rooms ever :O
+                    No rooms ever :0
                 </div>
             {% endif %}
         </div>
