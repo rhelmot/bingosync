@@ -15,7 +15,7 @@
             <div class="panel-body">
                 <form class="form-horizontal" action="{% url 'room_view' encoded_room_uuid %}" method="post">
                     {% csrf_token %}
-                    {{ bootstrap_form form }}
+                    {{ crispy form }}
                     <div class="form-group">
                         <div class="col-md-4 pull-right">
                             <input type="submit" class="form-control" value="Join Room" />
