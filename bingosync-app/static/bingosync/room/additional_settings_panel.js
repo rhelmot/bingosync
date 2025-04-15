@@ -368,7 +368,7 @@ var AdditionalSettingsPanel = (function(){
 			BAV.square_observers[i] = new MutationObserver(squareObserverCallback);
 			BAV.square_observers[i].observe($square, { attributes: true });
 
-			$square.querySelector("div.text-container").style.zIndex = 1;
+			$square.querySelector("div.text-container").style.zIndex = 2;
 		}
 
 		const $color_buttons = document.querySelectorAll("div.color-chooser");
