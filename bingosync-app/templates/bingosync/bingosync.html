@@ -23,7 +23,7 @@
                     {% include 'bingosync/color_chooser.html' %}
                 <div class="board-container{{ room.hide_card|yesno:" hidden-card," }}">
                     {% include 'bingosync/board.html' %}
-                    <div class="board-cover">
+                    <div class="board-cover" style="z-index: 3;">
                         <div class="board-cover-text unselectable">
                             Click to Reveal
                         </div>
