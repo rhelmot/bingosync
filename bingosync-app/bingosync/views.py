@@ -181,18 +181,20 @@ def room_scores2(request, encoded_room_uuid):
     ]
 
     room = Room.get_for_encoded_uuid_or_404(encoded_room_uuid)
-    squareColors = [(sublist.slot, item.name) for sublist in room.current_game.squares for item in sublist.color.colors]
+    squareColors = [(sublist.slot, item.name) for sublist in room.current_game.squares for item in sublist.color.colors if item.name != "blank"]
     colorSquares = {}
     for color in colorNames:
         colorSquares[color] = []
     for (slot, color) in squareColors:
+        print(slot, color)
         colorSquares[color].append(slot)
 
     res = {}
     for color in colorNames:
         squares=colorSquares[color]
         count = len(squares)
-        lines = sum((all(slot in squares for slot in line)) for line in lines)
+        linesCount = sum((all(slot in squares for slot in line)) for line in lines)
+        res[color] = {"score": count, "lines": linesCount}
     
     return JsonResponse(res, safe=False)
 
