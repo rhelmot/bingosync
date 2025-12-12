@@ -151,11 +151,57 @@ def room_scores(request, encoded_room_uuid):
         colorsDict[color] += 1
     return JsonResponse(colorsDict, safe=False)
 
+def room_scores2(request, encoded_room_uuid):
+    # TODO: Unify this with 
+    colorNames = [
+            "orange",
+            "red",
+            "blue",
+            "green",
+            "purple",
+            "navy",
+            "teal",
+            "forest",
+            "pink",
+            "yellow",
+    ]
+    lines=[
+        [1,2,3,4,5], #r1
+        [6,7,8,9,10], #r2
+        [11,12,13,14,15], #r3
+        [16,17,18,19,20], #r4
+        [21,22,23,24,25], #r5
+        [1,6,11,16,21], #c1
+        [2,7,12,17,22], #c2
+        [3,8,13,18,23], #c3
+        [4,9,14,19,24], #c4
+        [5,10,15,20,25], #c5
+        [1,7,13,19,25], #rtlbr
+        [5,9,13,17,21], #rtlbr
+    ]
+
+    room = Room.get_for_encoded_uuid_or_404(encoded_room_uuid)
+    squareColors = [(sublist.slot, item.name) for sublist in room.current_game.squares for item in sublist.color.colors]
+    colorSquares = {}
+    for color in colorNames:
+        colorSquares[color] = []
+    for (slot, color) in squareColors:
+        colorSquares[color].append(slot)
+
+    res = {}
+    for color in colorNames:
+        squares=colorSquares[color]
+        count = len(squares)
+        lines = sum((all(slot in squares for slot in line)) for line in lines)
+    
+    return JsonResponse(res, safe=False)
+
+
 # AJAX view to render the room settings panel
 def room_settings(request, encoded_room_uuid):
     room = Room.get_for_encoded_uuid(encoded_room_uuid)
     panel = loader.get_template("bingosync/room_settings_panel.html").render({"game": room.current_game, "room": room}, request)
-    return JsonResponse({"panel": panel, "settings": room.settings});
+    return JsonResponse({"panel": panel, "settings": room.settings})
 
 @csrf_exempt
 def new_card(request):
