@@ -1,9 +1,10 @@
 var RoomSettingsPanel = (function(){
     "use strict";
 
-    var RoomSettingsPanel = function($roomSettingsContainer, roomSettingsUrl, board) {
+    var RoomSettingsPanel = function($roomSettingsContainer, roomSettingsUrl, boardHiddenUrl, board) {
         this.$roomSettingsContainer = $roomSettingsContainer;
         this.roomSettingsUrl = roomSettingsUrl;
+        this.boardHiddenUrl = boardHiddenUrl;
         this.board = board;
 
         this.initPanel();
@@ -12,11 +13,26 @@ var RoomSettingsPanel = (function(){
     RoomSettingsPanel.prototype.initPanel = function() {
         this.$panelBody = this.$roomSettingsContainer.find(".panel-body");
         this.$collapseButton = this.$roomSettingsContainer.find(".collapse-button");
+        this.$hideButton = this.$roomSettingsContainer.find(".hide-button");
 
         var that = this;
         this.$collapseButton.on("mousedown", function() {
             that.$panelBody.toggle(50);
         });
+
+        this.$hideButton.on("mousedown", function() {
+            hideBoard();
+            $.ajax({
+                "url": that.boardHiddenUrl,
+                "type": "PUT",
+                "data": JSON.stringify({
+                    "room": window.sessionStorage.getItem("room"),
+                }),
+                "error": function(result) {
+                    console.log(result);
+                }
+            });
+        })
     };
 
     RoomSettingsPanel.prototype.reloadSettingsRequest = function() {
@@ -56,6 +72,10 @@ var RoomSettingsPanel = (function(){
     RoomSettingsPanel.prototype.reloadSettings = function() {
         this.reloadSettingsRequest();
     };
+
+    RoomSettingsPanel.prototype.setBoardHidden = function(hideBoard) {
+        this.$hideButton.disabled = !hideBoard;
+    }
 
     return RoomSettingsPanel;
 })();

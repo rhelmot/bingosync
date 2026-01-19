@@ -18,9 +18,9 @@ from bingosync.generators import InvalidBoardException, GeneratorException
 from bingosync.forms import RoomForm, JoinRoomForm, GoalListConverterForm
 from bingosync.models.colors import Color
 from bingosync.models.game_type import GameType, ALL_VARIANTS
-from bingosync.models.events import Event, ChatEvent, GoalEvent, RevealedEvent, ConnectionEvent, NewCardEvent
+from bingosync.models.events import Event, ChatEvent, GoalEvent, RevealedEvent, HiddenEvent, ConnectionEvent, NewCardEvent
 from bingosync.models.rooms import ANON_PLAYER, Room, Game, LockoutMode, Player
-from bingosync.publish import publish_goal_event, publish_chat_event, publish_color_event, publish_revealed_event
+from bingosync.publish import publish_goal_event, publish_chat_event, publish_color_event, publish_revealed_event, publish_hidden_event
 from bingosync.publish import publish_connection_event, publish_new_card_event
 from bingosync.util import generate_encoded_uuid, ANON_UUID, encode_uuid
 
@@ -366,6 +366,18 @@ def board_revealed(request):
     revealed_event = RevealedEvent(player=player, player_color_value=player.color.value)
     revealed_event.save()
     publish_revealed_event(revealed_event)
+    return HttpResponse("Received data: " + str(data))
+
+@csrf_exempt
+def board_hidden(request):
+    data = parse_body_json_or_400(request, required_keys=["room"])
+
+    room = Room.get_for_encoded_uuid_or_404(data["room"])
+    player = _get_session_player(request.session, room)
+
+    hidden_event = HiddenEvent(player=player, player_color_value=player.color.value)
+    hidden_event.save()
+    publish_hidden_event(hidden_event)
     return HttpResponse("Received data: " + str(data))
 
 @csrf_exempt

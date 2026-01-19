@@ -86,6 +86,7 @@
         var socketsUrl = "{{ sockets_url }}/broadcast";
         var goalSelectedUrl = "{% url 'goal_selected' %}";
         var boardRevealedUrl = "{% url 'board_revealed' %}";
+        var boardHiddenUrl = "{% url 'board_hidden' %}";
         var roomSettingsUrl = "{% url 'room_settings' room.encoded_uuid %}";
         var temporarySocketKey = "{{ temporary_socket_key }}";
 
@@ -95,7 +96,7 @@
         colorChooser.$board = board;
         var boardCover = new BoardCover($(".board-container"), ROOM_SETTINGS.hide_card, boardRevealedUrl);
         var playersPanel = new PlayersPanel($("#players-panel"));
-        var roomSettingsPanel = new RoomSettingsPanel($("#room-settings-container"), roomSettingsUrl, board);
+        var roomSettingsPanel = new RoomSettingsPanel($("#room-settings-container"), roomSettingsUrl, boardHiddenUrl, board);
 
         additionalSettingsPanel = undefined;
 
@@ -125,9 +126,11 @@
         };
         hideBoard = function() {
             boardCover.setBoardHidden(true);
+            roomSettingsPanel.setBoardHidden(true);
         };
         revealBoard = function() {
             boardCover.setBoardHidden(false);
+            roomSettingsPanel.setBoardHidden(false);
             $("#the-seed").text(ROOM_SETTINGS.seed);
             var $seedHidden = $("#bingo-chat .new-card-message .seed-hidden");
             $seedHidden.text(ROOM_SETTINGS.seed).removeClass('seed-hidden').addClass('seed');

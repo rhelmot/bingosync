@@ -19,6 +19,10 @@ def publish_revealed_event(revealed_event):
     data = revealed_event.to_json()
     _publish_json(data, revealed_event.player.room)
 
+def publish_hidden_event(hidden_event):
+    data = hidden_event.to_json()
+    _publish_json(data, hidden_event.player.room)
+
 def publish_connection_event(connection_event):
     data = connection_event.to_json()
     _publish_json(data, connection_event.player.room)
