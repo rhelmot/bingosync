@@ -284,6 +284,7 @@ var Board = (function(){
 
         
         this.squares.forEach((el) => hideIfHidden(el));
+        this.refitGoalText();
     };
 
     Board.prototype.setJson = function(json) {
