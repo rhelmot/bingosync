@@ -13,7 +13,7 @@ let
       gunicorn
       certifi
       chardet
-      django_4
+      django_5
       django-bootstrap3
       django-crispy-forms
       django-crispy-bootstrap3
