@@ -444,8 +444,22 @@ var AdditionalSettingsPanel = (function(){
             for (var i = 0; i < order.length; i++) {
                 var msg = order[i];
                 var square = board.getSquare(msg.square.slot);
-                var minutes = (msg.timestamp - startTime) / 60;
-                var text = `#${i + 1}, ${minutes.toFixed(1)}m`;
+                var totalSeconds = msg.timestamp - startTime;
+                var hours = ((totalSeconds / (60 * 60)) | 0).toFixed(0);
+                var minutes = (((totalSeconds / 60) % 60) | 0).toFixed(0);
+                var seconds = ((totalSeconds % 60) | 0).toFixed(0);
+                if (seconds.length == 1) {
+                    seconds = "0" + seconds;
+                }
+                if (hours < 1) {
+                    var timeText = `${minutes}:${seconds}`;
+                } else {
+                    if (minutes.length == 1) {
+                        minutes = "0" + minutes;
+                    }
+                    var timeText = `${hours}:${minutes}:${seconds}`;
+                }
+                var text = `#${i + 1}, ${timeText}`;
                 var elem = $('<div class="postgame-summary"></div>').text(text);
                 square.$square.find(".text-container").append(elem);
             }
