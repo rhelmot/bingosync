@@ -102,7 +102,6 @@ var ChatPanel = (function(){
     };
 
     ChatPanel.prototype.appendChatMessage = function(message, messageType) {
-        this.chatData.push(message);
         var entry = $("<div>", {"class": messageType, html: message});
         var setting = this.$chatSettings.find("#" + messageType + "-toggle");
         entry.toggle(setting.prop("checked"));
@@ -147,6 +146,7 @@ var ChatPanel = (function(){
     ChatPanel.prototype.handleEvent = function(json) {
         var result = processChatJson(json);
         this.appendChatMessage(result, json["type"] + "-entry");
+        this.chatData.push(json);
     };
 
     ChatPanel.prototype.onSend = function() {
