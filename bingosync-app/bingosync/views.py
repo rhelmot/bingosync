@@ -186,7 +186,6 @@ def room_scores2(request, encoded_room_uuid):
     for color in colorNames:
         colorSquares[color] = []
     for (slot, color) in squareColors:
-        print(slot, color)
         colorSquares[color].append(slot)
 
     res = {}
