@@ -51,6 +51,12 @@ var ChatPanel = (function(){
             var revealedMessage = playerName + " revealed the card";
             return $("<div>", {"class": "revealed-message", html: timeHtml + " " + revealedMessage}).toHtml();
         }
+        else if(json["type"] === "hidden") {
+            var playerColorClass = getPlayerColorClass(json["player_color"]);
+            var playerName = $("<span>", {"class": playerColorClass, text: json["player"]["name"]}).toHtml();
+            var revealedMessage = playerName + " hid the card";
+            return $("<div>", {"class": "revealed-message", html: timeHtml + " " + revealedMessage}).toHtml();
+        }
         else if(json["type"] === "new-card") {
             var playerColorClass = getPlayerColorClass(json["player_color"]);
             var playerName = $("<span>", {"class": playerColorClass, text: json["player"]["name"]}).toHtml();

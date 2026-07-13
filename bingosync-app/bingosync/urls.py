@@ -35,6 +35,7 @@ urlpatterns = [
     url(r'^api/chat$', views.chat_message, name='chat_message'),
     url(r'^api/color$', views.select_color, name='select_color'),
     url(r'^api/revealed$', views.board_revealed, name='board_revealed'),
+    url(r'^api/hidden$', views.board_hidden, name='board_hidden'),
     url(r'^api/new-card$', views.new_card, name='new_card'),
     url(r'^api/join-room$', views.join_room_api, name='join_room_api'),
     url(r'^api/get-socket-key/(?P<encoded_room_uuid>.+)$', views.get_socket_key, name='get_socket_key'),
