@@ -43,5 +43,16 @@ var PlayersPanel = (function(){
         });
     };
 
+    PlayersPanel.prototype.getPlayerColor = function(playerUuid) {
+        var $playerEntry = this.$playersPanel.find("#" + playerUuid);
+        var $playerGoalCounter = $playerEntry.find(".goalcounter");
+        for (var color of COLORS) {
+            if ($playerGoalCounter.hasClass(getSquareColorClass(color))) {
+                return color;
+            }
+        }
+        return null;
+    }
+
     return PlayersPanel;
 })();

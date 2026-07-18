@@ -18,6 +18,7 @@ function preciseSqrt(num) {
 
 // global variables that are overwritten in bingosync.html main
 var ROOM_SETTINGS = null;
+var PLAYERS_PANEL = null;
 var refreshBoard = function () {};
 var hideBoard = function() {};
 var revealBoard = function() {};

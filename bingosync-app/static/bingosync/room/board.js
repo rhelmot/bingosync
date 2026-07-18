@@ -27,7 +27,8 @@ var Board = (function(){
 
     function squareHasColor($square, colorClass) {
         var colors = getSquareColors($square);
-        return colors[colorClass];
+        // WHAT how did this ever work
+        return colors[colorClass] || colors[colorClass + "square"];
     }
 
     function updateColorOffsets($square) {
@@ -107,6 +108,7 @@ var Board = (function(){
         this.$board = $board;
         this.size = 0;
         this.isSpectator = playerJson.is_spectator;
+        this.playerUuid = playerJson.uuid;
         this.colorChooser = colorChooser;
         this.getBoardUrl = getBoardUrl;
         this.selectGoalUrl = selectGoalUrl;
@@ -213,7 +215,7 @@ var Board = (function(){
 
     Board.prototype.squareHasColor = function(slot, color) {
         var square = this.getSquare(slot);
-        return squareHasColor(square, color);
+        return squareHasColor(square.$square, color);
     };
 
     Board.prototype.hideSquares = function(override=null) {

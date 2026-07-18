@@ -426,17 +426,35 @@ var AdditionalSettingsPanel = (function(){
         if (checked) {
             var order = [];
             var checkers = new Set();
+            var seenSquares = new Set();
             var startTime = null;
+            var blackout = ROOM_SETTINGS.lockout_mode !== "Lockout";
+            var player_color = PLAYERS_PANEL.getPlayerColor(board.playerUuid);
             for (var i = chatPanel.chatData.length - 1; i >= 0; i--) {
                 var msg = chatPanel.chatData[i];
-                if (msg.type === "goal" && !msg.remove && board.getSquare(msg.square.slot, msg.color)) {
-                    order.push(msg);
+                var square;
+                if (msg.type === "goal" && !msg.remove) {
+                    if (blackout && msg.color != player_color) {
+                        continue;
+                    }
+                    if (seenSquares.has(msg.square.slot)) {
+                        continue;
+                    }
+                    if (!board.squareHasColor(msg.square.slot, msg.color)) {
+                        continue;
+                    }
+
                     checkers.add(msg.player.uuid);
+                    order.push(msg);
+                    seenSquares.add(msg.square.slot);
                 }
                 if (msg.type === "revealed" && checkers.has(msg.player.uuid)) {
                     startTime = msg.timestamp;
                 }
                 if (msg.type === "new-card") {
+                    if (startTime === null) {
+                        startTime = msg.timestamp;
+                    }
                     break;
                 }
             }
