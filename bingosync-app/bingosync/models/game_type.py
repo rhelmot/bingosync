@@ -365,6 +365,11 @@ class GameType(Enum):
     celeste_cheat_mode = 361
     custom_ccomm = 362
     celeste_beta = 363
+    # beta python generators for Celeste
+    celeste_v2 = 364
+    celeste_v2_beta = 365
+    celeste_v2_test = 366
+    celeste_v2_custom = 367
 
     def __str__(self):
         return self.short_name
@@ -395,6 +400,8 @@ class GameType(Enum):
 
     @property
     def is_custom(self):
+        # note that CComm v2 (custom) does NOT use CustomGenerator
+        # as BingoGenerator2 inherits BingoGenerator
         return self in (GameType.custom, GameType.custom_randomized, GameType.custom_srl_v5, GameType.custom_isaac, GameType.custom_ccomm)
 
     @property
@@ -421,7 +428,7 @@ class GameType(Enum):
     def game_choices():
         def to_sort_value(key):
             key = strip_articles(key[1]).lower()
-            FORCED_FIRST_NAMES = ["celeste", "celeste extensions", "custom (advanced)"]
+            FORCED_FIRST_NAMES = ["celeste", "celeste extensions", "custom (advanced)", "celeste v2"]
             if key in FORCED_FIRST_NAMES:
                 return (FORCED_FIRST_NAMES.index(key), key)
             return (len(FORCED_FIRST_NAMES), key)
@@ -522,6 +529,14 @@ MANUAL_GAME_GROUPS = {
             (GameType.celeste_turkish, "Normal - Turkish", "Celeste TR"),
         ],
     },
+    GameType.celeste_v2: {
+        "name": "Celeste v2",
+        "variants": [
+            (GameType.celeste_v2_test, "Test Dummy Generator", "Test Generator"),
+            (GameType.celeste_v2, "Lockout (v2)", "Celeste Lockout (3.2)"),
+            (GameType.celeste_v2_beta, "Lockout (v2 beta)", "Celeste Lockout (beta v2)"),
+        ],
+    },
     GameType.celeste_extensions: {
         "name" : "Celeste Extensions",
         "variants": [
@@ -541,6 +556,7 @@ MANUAL_GAME_GROUPS = {
         "name": "Custom (Advanced)",
         "variants": [
             (GameType.custom_ccomm, "CComm v1", "Custom (CComm)"),
+            (GameType.celeste_v2_custom, "CComm v2", "Custom (CComm v2)"),
             (GameType.custom, "Fixed Board", "Custom"),
             (GameType.custom_randomized, "Randomized", "Custom (Rand)"),
             (GameType.custom_srl_v5, "SRL v5", "Custom (SRLv5)"),

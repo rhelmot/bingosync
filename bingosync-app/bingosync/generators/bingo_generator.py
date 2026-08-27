@@ -16,7 +16,19 @@ PREFERRED_SIZE_RE = re.compile(r'generator-preferred-size: (\d)+')
 
 
 def load_generator(game_name):
+    ## for now, hardcode paths for celeste v2 game names:
+    from bingosync.generators.generators_v2.bingo_generator_2 import BingoGeneratorV2
+    if game_name == "celeste_v2_test":
+        return BingoGeneratorV2()
+    if game_name == "celeste_v2":
+        pass
+    if game_name == "celeste_v2_beta":
+        pass
+    if game_name == "celeste_v2_custom":
+        pass
+
     filename = os.path.join(GEN_DIR, GEN_NAME_TEMPL.format(game_name))
+    print("FILE NAME", filename)
     with open(filename) as js_file:
         return BingoGenerator(game_name, js_file.read())
 
@@ -56,6 +68,8 @@ class BingoGenerator:
         js_eval = "\nconsole.log(JSON.stringify(" + js_command + "));"
         full_command = self.generator_js_bytes + js_eval.encode("utf-8")
 
+        print(full_command)
+
         try:
             out = subprocess.check_output(["node", "-"], input=full_command, timeout=GENERATOR_TIMEOUT_SECONDS)
         except subprocess.TimeoutExpired:
@@ -80,7 +94,7 @@ class BingoGenerator:
         js_command = "bingoGenerator(bingoList, " + json.dumps(opts) + ")"
         card = self.eval(js_command)
 
-        print(card)
+        print(process_card(card, seed, size))
 
         return process_card(card, seed, size)
 
