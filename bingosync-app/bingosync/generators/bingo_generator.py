@@ -12,20 +12,36 @@ logger = logging.getLogger(__name__)
 GEN_DIR = "generators"
 GEN_NAME_TEMPL = "{}_generator.js"
 
+GEN_DIR_V2 = os.path.join("generators", "generator_jsons_v2")
+
 PREFERRED_SIZE_RE = re.compile(r'generator-preferred-size: (\d)+')
 
+# Generator JSONs that use CComm v2 -- only custom for now
+CCOMM_V2_FORMATS = ["celeste_v2_custom"]
 
-def load_generator(game_name):
-    ## for now, hardcode paths for celeste v2 game names:
-    from bingosync.generators.generators_v2.bingo_generator_2 import BingoGeneratorV2
-    if game_name == "celeste_v2_test":
-        return BingoGeneratorV2()
-    if game_name == "celeste_v2":
-        pass
-    if game_name == "celeste_v2_beta":
-        pass
-    if game_name == "celeste_v2_custom":
-        pass
+def load_generator(game_name: str):
+    if game_name.startswith("celeste_v2"):
+        from bingosync.generators.generators_v2.bingo_generator_2 import BingoGeneratorV2
+        from bingosync.generators.generators_v2.bg2_ccomm_v1 import CCommV1
+        from bingosync.generators.generators_v2.bg2_ccomm_v2 import CCommV2
+
+        # first, find the generator json
+        json_name = "celeste_v2_lockout" if game_name == "celeste_v2" else game_name
+        json_name += ".json"
+
+        board_json : str | None = None
+        try:
+            filename = os.path.join(GEN_DIR_V2, json_name)
+            with open(filename) as json_file:
+                board_json = json_file.read()            
+        except Exception:
+            pass
+
+        if game_name in CCOMM_V2_FORMATS:
+            return CCommV2(board_json)
+
+        # fallback to CCommV1
+        return CCommV1(board_json)
 
     filename = os.path.join(GEN_DIR, GEN_NAME_TEMPL.format(game_name))
     print("FILE NAME", filename)
@@ -76,6 +92,8 @@ class BingoGenerator:
             error_message = "Took too long to generate a bingo board for game '" + self.game_name + "'"
             logging.error(error_message)
             raise GeneratorException(error_message)
+
+        print(out)
 
         return json.loads(out.decode("utf-8"))
 
