@@ -44,7 +44,6 @@ def load_generator(game_name: str):
         return CCommV1(board_json)
 
     filename = os.path.join(GEN_DIR, GEN_NAME_TEMPL.format(game_name))
-    print("FILE NAME", filename)
     with open(filename) as js_file:
         return BingoGenerator(game_name, js_file.read())
 
@@ -84,16 +83,12 @@ class BingoGenerator:
         js_eval = "\nconsole.log(JSON.stringify(" + js_command + "));"
         full_command = self.generator_js_bytes + js_eval.encode("utf-8")
 
-        print(full_command)
-
         try:
             out = subprocess.check_output(["node", "-"], input=full_command, timeout=GENERATOR_TIMEOUT_SECONDS)
         except subprocess.TimeoutExpired:
             error_message = "Took too long to generate a bingo board for game '" + self.game_name + "'"
             logging.error(error_message)
             raise GeneratorException(error_message)
-
-        print(out)
 
         return json.loads(out.decode("utf-8"))
 
@@ -112,7 +107,7 @@ class BingoGenerator:
         js_command = "bingoGenerator(bingoList, " + json.dumps(opts) + ")"
         card = self.eval(js_command)
 
-        print(process_card(card, seed, size))
+        print(card)
 
         return process_card(card, seed, size)
 
