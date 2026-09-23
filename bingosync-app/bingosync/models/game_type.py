@@ -367,8 +367,9 @@ class GameType(Enum):
     celeste_beta = 363
     # beta python generators for Celeste
     celeste_v2 = 364
-    celeste_v2_beta = 365
-    celeste_v2_custom = 366
+    celeste_v2_custom = 365
+    celeste_v2_3_3 = 366
+    celeste_v2_3_4 = 367
 
     def __str__(self):
         return self.short_name
@@ -532,7 +533,8 @@ MANUAL_GAME_GROUPS = {
         "name": "Celeste v2",
         "variants": [
             (GameType.celeste_v2, "Lockout (v2)", "Celeste Lockout (3.2)"),
-            (GameType.celeste_v2_beta, "Lockout (v2 beta)", "Celeste Lockout (beta v2)"),
+            (GameType.celeste_v2_3_3, "Lockout (beta 3.3)", "Celeste Lockout (beta 3.3)"),
+            (GameType.celeste_v2_3_4, "Lockout (beta 3.4)", "Celeste Lockout (beta 3.4)"),
         ],
     },
     GameType.celeste_extensions: {

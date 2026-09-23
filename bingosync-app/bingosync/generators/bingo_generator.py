@@ -32,7 +32,7 @@ def load_generator(game_name: str):
         board_json : str | None = None
         try:
             filename = os.path.join(GEN_DIR_V2, json_name)
-            with open(filename) as json_file:
+            with open(filename, encoding="utf-8") as json_file:
                 board_json = json_file.read()            
         except Exception:
             pass
