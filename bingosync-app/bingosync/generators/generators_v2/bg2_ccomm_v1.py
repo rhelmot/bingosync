@@ -27,12 +27,13 @@ class CCommV1(BingoGeneratorV2):
         Error cases can call back to _backup_generate()"""
 
         self.rand = random.Random(seed)
-        self.generated_tiers = False
 
         if len(generator_json) != size * size:
             generator_json = self.rebalance_tiers(generator_json, size)
 
-        bingo_board = [GeneratorOutputSquare(name="", tier=0)] * 25
+        self.init_difficulty(size)
+
+        bingo_board = [GeneratorOutputSquare(name="", tier=0)] * (size * size)
         for i in range(size * size):
             tier = self.difficulty(size, i)
             bingo_board[i] = GeneratorOutputSquare(name=f"Tier {tier} Objective", tier=tier)
@@ -132,20 +133,8 @@ class CCommV1(BingoGeneratorV2):
         self.shuffle(tier_copy)
         return tier_copy
 
-    def difficulty(self, size, tier):
-            # This function takes a space on the board between 0 and 24, and returns its difficulty score, also between 0 and 24.
-            # For some sizes, these should always form a magic square if seed remains the same
+    def init_difficulty(self, size):
         if size == 5:
-            return self.difficulty_5(tier)
-
-        try:
-            return self.rand_tiers[tier]
-        except AttributeError:
-            self.rand_tiers = self.shuffle([*range(size * size)])
-            return self.rand_tiers[tier]
-
-    def difficulty_5(self, tier):
-        if not self.generated_tiers:
             # Taken from legacy ccomm_v1
             self.rt1 = [*range(5)]
             self.shuffle(self.rt1)
@@ -154,8 +143,18 @@ class CCommV1(BingoGeneratorV2):
             self.shuffle(self.rt2)
 
             self.random_seed_x = self.rand.randint(0, 4)
-            self.generated_tiers = True
+        else:
+            self.rand_tiers = self.shuffle([*range(size * size)])
 
+    def difficulty(self, size, tier):
+            # This function takes a space on the board between 0 and 24, and returns its difficulty score, also between 0 and 24.
+            # For some sizes, these should always form a magic square if seed remains the same
+        if size == 5:
+            return self.difficulty_5(tier)
+
+        return self.rand_tiers[tier]
+
+    def difficulty_5(self, tier):
         y = tier // 5
         x = (tier + self.random_seed_x) % 5
         index1 = (x + 3 * y) % 5
