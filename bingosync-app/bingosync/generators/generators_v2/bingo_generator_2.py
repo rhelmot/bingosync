@@ -11,6 +11,7 @@ class GeneratorEntry(BaseModel):
 class GeneratorOutputSquare(BaseModel):
     name: str
     tier: int
+    tags: list[str] = []
 
 type GeneratorOutput = list[GeneratorOutputSquare]
 
