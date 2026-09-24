@@ -22,6 +22,12 @@ bingoGenerator = function(bingoList, opts) {
 
     shuffle(bingoList);
 
+    for (var i = 0; i < size * size; i++) {
+        bingoList[i].difficulty = 1;
+    }
+    var fogStart = Math.ceil(size * size * Math.random());
+    bingoList[fogStart].difficulty = 0;
+
     return {"objectives": bingoList.slice(0, size * size), "seed": SEED};
 };
 
