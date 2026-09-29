@@ -25,6 +25,7 @@ let
       six
       tornado
       urllib3
+      pydantic
     ]
     ++ cfg.extraPythonPackages p
   );
