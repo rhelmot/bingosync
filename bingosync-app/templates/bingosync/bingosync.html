@@ -97,9 +97,7 @@
         additionalSettingsPanel = undefined;
 
         // Celeste Long New is the current name of the category extensions
-        if (ROOM_SETTINGS.game == "Celeste" || ROOM_SETTINGS.game == "Celeste Long New" || ROOM_SETTINGS.game == "Custom"){
-            var additionalSettingsPanel = new AdditionalSettingsPanel($("#additional-settings-container"), $("#bingo"));
-        }
+        var additionalSettingsPanel = new AdditionalSettingsPanel($("#additional-settings-container"), $("#bingo"));
 
         chatPanel = new ChatPanel($("#bingo-chat"), $("#chat-settings"), chatUrl, chatHistoryUrl);
         initializeChatSettings($("#chat-settings"), $("#bingo-chat"), ROOM_SETTINGS.fog_of_war);
