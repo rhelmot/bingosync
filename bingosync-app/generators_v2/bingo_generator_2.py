@@ -1,5 +1,4 @@
 from pydantic import BaseModel
-from bingosync.generators.bingo_generator import BingoGenerator
 import random
 
 type CcommV1Generator = list[list[GeneratorEntry]]
@@ -17,9 +16,10 @@ type GeneratorOutput = list[GeneratorOutputSquare]
 
 MAX_SEEDCOUNT = 10_000_000 - 1
 
-class BingoGeneratorV2(BingoGenerator):
+class BingoGeneratorV2():
     def __init__(self, generator_json_str : str | None):
         self.generator_json = self.validate_custom_json(generator_json_str)
+        self.debug = False
 
     def get_card(
             self, 
@@ -54,6 +54,9 @@ class BingoGeneratorV2(BingoGenerator):
             output = self._backup_generate(size)
 
         return (seed, [square.model_dump() for square in output])
+
+    def default_generate(self, seed: int, size: int = 5):
+        return self.generate(seed, self.generator_json, size)
 
     def generate(self, 
                    seed : int, 

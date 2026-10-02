@@ -1,4 +1,4 @@
-from bingosync.generators.generators_v2.bingo_generator_2 import *
+from generators_v2.bingo_generator_2 import *
 import json
 import math
 import random
@@ -53,10 +53,13 @@ class CCommV1(BingoGeneratorV2):
                     tags=shuffled_goals[j].types)
                 bingo_board[i] = current_obj
                 obj_synergy = self.check_line_synergy(i, size, bingo_board)
+                if self.debug:
+                    current_obj.name = f"[SYN = {obj_synergy}] {current_obj.name}"
                 if min_syn_obj == None or obj_synergy < synergy:
                     min_syn_obj = current_obj
                     synergy = obj_synergy
                 j += 1
+            bingo_board[i] = min_syn_obj
 
         return bingo_board
 
@@ -81,26 +84,40 @@ class CCommV1(BingoGeneratorV2):
 
     def check_line_synergy(self, square : int, size : int, board : GeneratorOutput) -> int:
         """Iterate the given square's rows and columns to count objectives with synergy"""
+
         row = square % size
         col = square // size
 
         self_tags = board[square].tags
+        if self.debug:
+            print(f"GET SYNERGY FOR SQUARE {square} ({chr(row + ord('A'))}{col + 1})")
+            for obj in board:
+                print("\t", obj)
+            print(self_tags)
         synergy = 0
         # Iterate row
         for i in range(size):
             if i == col:
                 continue
             for tag in self_tags:
-                if tag in board[(row * size) + i].tags:
+                if tag in board[(i * size) + row].tags:
+                    if self.debug:
+                        print(f"Synergy ({tag}) found with obj {board[(i * size) + row].name}")
                     synergy += 1
+                elif self.debug: 
+                    print(f"\tNone Synergy with found with obj {board[(i * size) + row].name}")
 
         # Iterate col
         for i in range(size):
             if i == row:
                 continue
             for tag in self_tags:
-                if tag in board[(i * size) + col].tags:
+                if tag in board[(col * size) + i].tags:
+                    if self.debug:
+                        print(f"Synergy ({tag}) found with obj {board[(col * size) + i].name}")
                     synergy += 1
+                elif self.debug: 
+                    print(f"\tNone Synergy with found with obj {board[(col * size) + i].name}")
 
         # Iterate TLBR
         if row == col:
@@ -109,6 +126,8 @@ class CCommV1(BingoGeneratorV2):
                     continue
                 for tag in self_tags:
                     if tag in board[(i * size) + i].tags:
+                        if self.debug:
+                            print(f"Synergy ({tag}) found with obj {board[(i * size) + i].name}")
                         synergy += 1
 
         # Iterate TRBL
@@ -118,7 +137,14 @@ class CCommV1(BingoGeneratorV2):
                     continue
                 for tag in self_tags:
                     if tag in board[(i * size) + size - i - 1].tags:
+                        if self.debug:
+                            print(f"Synergy ({tag}) found with obj {board[(i * size) + size - i - 1].name}")
                         synergy += 1
+
+        if self.debug:
+            print(f"SYNERGY: {synergy}")
+            print()
+            print()
         return synergy
 
     def shuffle(self, list : list):
