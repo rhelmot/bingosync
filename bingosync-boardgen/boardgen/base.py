@@ -9,9 +9,11 @@ import functools
 import subprocess
 from typing import Any
 
-from pydantic import BaseModel, TypeAdapter, model_validator, Field
+from pydantic import BaseModel, TypeAdapter, model_validator, Field, ConfigDict
 
 class GeneratorOutputSquare(BaseModel):
+    model_config = ConfigDict(validate_by_name=True, validate_by_alias=True)
+
     name: str
     tier: int = Field(validation_alias="difficulty")
     tags: list[str] = []
