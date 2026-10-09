@@ -17,9 +17,9 @@ type GeneratorOutput = list[GeneratorOutputSquare]
 MAX_SEEDCOUNT = 10_000_000 - 1
 
 class BingoGeneratorV2():
-    def __init__(self, generator_json_str : str | None):
+    def __init__(self, generator_json_str : str | None, debug : bool = False):
         self.generator_json = self.validate_custom_json(generator_json_str)
-        self.debug = False
+        self.debug = debug
 
     def get_card(
             self, 

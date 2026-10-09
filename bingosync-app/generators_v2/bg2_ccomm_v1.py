@@ -46,6 +46,7 @@ class CCommV1(BingoGeneratorV2):
             synergy = 9999
             current_obj = None
             min_syn_obj = None
+            min_index = 0
             while synergy != 0  and j < len(shuffled_goals):
                 current_obj = GeneratorOutputSquare(
                     name=shuffled_goals[j].name,
@@ -53,13 +54,20 @@ class CCommV1(BingoGeneratorV2):
                     tags=shuffled_goals[j].types)
                 bingo_board[i] = current_obj
                 obj_synergy = self.check_line_synergy(i, size, bingo_board)
-                if self.debug:
-                    current_obj.name = f"[SYN = {obj_synergy}] {current_obj.name}"
                 if min_syn_obj == None or obj_synergy < synergy:
+                    # if self.debug and synergy != 9999:
+                    #     print(f"replaced best synergy {synergy} =>> {obj_synergy}")
                     min_syn_obj = current_obj
                     synergy = obj_synergy
+                    min_index = j
                 j += 1
             bingo_board[i] = min_syn_obj
+            if self.debug and tier == 0:
+                obj = bingo_board[i].name
+                if (obj, min_index) in self.which_objs.keys():
+                    self.which_objs[(obj, min_index)] += 1
+                else:
+                    self.which_objs[(obj, min_index)] = 1
 
         return bingo_board
 
@@ -89,11 +97,6 @@ class CCommV1(BingoGeneratorV2):
         col = square // size
 
         self_tags = board[square].tags
-        if self.debug:
-            print(f"GET SYNERGY FOR SQUARE {square} ({chr(row + ord('A'))}{col + 1})")
-            for obj in board:
-                print("\t", obj)
-            print(self_tags)
         synergy = 0
         # Iterate row
         for i in range(size):
@@ -101,11 +104,7 @@ class CCommV1(BingoGeneratorV2):
                 continue
             for tag in self_tags:
                 if tag in board[(i * size) + row].tags:
-                    if self.debug:
-                        print(f"Synergy ({tag}) found with obj {board[(i * size) + row].name}")
                     synergy += 1
-                elif self.debug: 
-                    print(f"\tNone Synergy with found with obj {board[(i * size) + row].name}")
 
         # Iterate col
         for i in range(size):
@@ -113,11 +112,7 @@ class CCommV1(BingoGeneratorV2):
                 continue
             for tag in self_tags:
                 if tag in board[(col * size) + i].tags:
-                    if self.debug:
-                        print(f"Synergy ({tag}) found with obj {board[(col * size) + i].name}")
                     synergy += 1
-                elif self.debug: 
-                    print(f"\tNone Synergy with found with obj {board[(col * size) + i].name}")
 
         # Iterate TLBR
         if row == col:
@@ -126,8 +121,6 @@ class CCommV1(BingoGeneratorV2):
                     continue
                 for tag in self_tags:
                     if tag in board[(i * size) + i].tags:
-                        if self.debug:
-                            print(f"Synergy ({tag}) found with obj {board[(i * size) + i].name}")
                         synergy += 1
 
         # Iterate TRBL
@@ -137,14 +130,7 @@ class CCommV1(BingoGeneratorV2):
                     continue
                 for tag in self_tags:
                     if tag in board[(i * size) + size - i - 1].tags:
-                        if self.debug:
-                            print(f"Synergy ({tag}) found with obj {board[(i * size) + size - i - 1].name}")
                         synergy += 1
-
-        if self.debug:
-            print(f"SYNERGY: {synergy}")
-            print()
-            print()
         return synergy
 
     def shuffle(self, list : list):
