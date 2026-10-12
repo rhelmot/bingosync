@@ -1,6 +1,6 @@
 from __future__ import annotations
 import os
-from typing import Any
+from typing import Any, Iterator
 import json
 import subprocess
 
@@ -38,3 +38,29 @@ class BingoGeneratorLegacyNodejs(BingoGenerator):
             raise TimeoutError("NodeJS timed out") from e
 
         return json.loads(out)
+
+class BingoGeneratorLegacyNodejsBulk(BingoGeneratorLegacyNodejs):
+    def all_the_boards(self, min_seed=0, max_seed=1_000_000 - 1) -> Iterator[LegacyNodejsOutput]:
+        full_command = self.generator_bytes + f"""
+            var i = {min_seed};
+            const max_seed = {max_seed};
+            function seed() {{
+                while (i <= max_seed) {{
+                    if (!process.stdout.write(JSON.stringify(bingoGenerator(bingoList, {{seed: i++}})) + "\\n")) {{
+                        return process.stdout.once('drain', seed);
+                    }}
+                }}
+            }}
+            seed();
+        """.encode()
+        p = subprocess.Popen(["node", "-"], cwd=os.path.join(os.path.dirname(__file__), "js"), stdin=subprocess.PIPE, stdout=subprocess.PIPE, text=False)
+        assert p.stdin is not None
+        assert p.stdout is not None
+        p.stdin.write(full_command)
+        p.stdin.flush()
+        p.stdin.close()
+        for i, line in enumerate(p.stdout):
+            # if i % 1000 == 0:
+            #     print(i)
+            yield LegacyNodejsOutput.model_validate_json(line)
+        p.wait()
