@@ -1,4 +1,4 @@
-from bingosync.generators.generators_v2.bingo_generator_2 import *
+from generators_v2.bingo_generator_2 import *
 import json
 import math
 import random
@@ -46,6 +46,7 @@ class CCommV1(BingoGeneratorV2):
             synergy = 9999
             current_obj = None
             min_syn_obj = None
+            min_index = 0
             while synergy != 0  and j < len(shuffled_goals):
                 current_obj = GeneratorOutputSquare(
                     name=shuffled_goals[j].name,
@@ -54,9 +55,19 @@ class CCommV1(BingoGeneratorV2):
                 bingo_board[i] = current_obj
                 obj_synergy = self.check_line_synergy(i, size, bingo_board)
                 if min_syn_obj == None or obj_synergy < synergy:
+                    # if self.debug and synergy != 9999:
+                    #     print(f"replaced best synergy {synergy} =>> {obj_synergy}")
                     min_syn_obj = current_obj
                     synergy = obj_synergy
+                    min_index = j
                 j += 1
+            bingo_board[i] = min_syn_obj
+            if self.debug and tier == 0:
+                obj = bingo_board[i].name
+                if (obj, min_index) in self.which_objs.keys():
+                    self.which_objs[(obj, min_index)] += 1
+                else:
+                    self.which_objs[(obj, min_index)] = 1
 
         return bingo_board
 
@@ -81,6 +92,9 @@ class CCommV1(BingoGeneratorV2):
 
     def check_line_synergy(self, square : int, size : int, board : GeneratorOutput) -> int:
         """Iterate the given square's rows and columns to count objectives with synergy"""
+
+        # TODO Fix row and col are sorta swapped rn
+
         row = square % size
         col = square // size
 
@@ -91,7 +105,7 @@ class CCommV1(BingoGeneratorV2):
             if i == col:
                 continue
             for tag in self_tags:
-                if tag in board[(row * size) + i].tags:
+                if tag in board[(i * size) + row].tags:
                     synergy += 1
 
         # Iterate col
@@ -99,7 +113,7 @@ class CCommV1(BingoGeneratorV2):
             if i == row:
                 continue
             for tag in self_tags:
-                if tag in board[(i * size) + col].tags:
+                if tag in board[(col * size) + i].tags:
                     synergy += 1
 
         # Iterate TLBR
@@ -114,7 +128,7 @@ class CCommV1(BingoGeneratorV2):
         # Iterate TRBL
         if row == (size - col - 1):
             for i in range(size):
-                if i == row:
+                if i == col:
                     continue
                 for tag in self_tags:
                     if tag in board[(i * size) + size - i - 1].tags:

@@ -21,9 +21,9 @@ CCOMM_V2_FORMATS = ["celeste_v2_custom"]
 
 def load_generator(game_name: str):
     if game_name.startswith("celeste_v2"):
-        from bingosync.generators.generators_v2.bingo_generator_2 import BingoGeneratorV2
-        from bingosync.generators.generators_v2.bg2_ccomm_v1 import CCommV1
-        from bingosync.generators.generators_v2.bg2_ccomm_v2 import CCommV2
+        from generators_v2.bingo_generator_2 import BingoGeneratorV2
+        from generators_v2.bg2_ccomm_v1 import CCommV1
+        from generators_v2.bg2_ccomm_v2 import CCommV2
 
         # first, find the generator json
         json_name = "celeste_v2_lockout" if game_name == "celeste_v2" else game_name
