@@ -46,7 +46,7 @@ class BingoGeneratorLegacyNodejsBulk(BingoGeneratorLegacyNodejs):
             const max_seed = {max_seed};
             function seed() {{
                 while (i <= max_seed) {{
-                    if (!process.stdout.write(JSON.stringify(bingoGenerator(bingoList, {{seed: i++}})) + "\\n")) {{
+                    if (!process.stdout.write(JSON.stringify(bingoGenerator(bingoList, {{seed: (i++).toString()}})) + "\\n")) {{
                         return process.stdout.once('drain', seed);
                     }}
                 }}
