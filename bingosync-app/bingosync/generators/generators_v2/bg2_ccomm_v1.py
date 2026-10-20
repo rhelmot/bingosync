@@ -57,6 +57,7 @@ class CCommV1(BingoGeneratorV2):
                     min_syn_obj = current_obj
                     synergy = obj_synergy
                 j += 1
+            bingo_board[i] = min_syn_obj
 
         return bingo_board
 
@@ -81,6 +82,9 @@ class CCommV1(BingoGeneratorV2):
 
     def check_line_synergy(self, square : int, size : int, board : GeneratorOutput) -> int:
         """Iterate the given square's rows and columns to count objectives with synergy"""
+
+        # TODO Fix row and col are sorta swapped rn
+
         row = square % size
         col = square // size
 
@@ -91,7 +95,7 @@ class CCommV1(BingoGeneratorV2):
             if i == col:
                 continue
             for tag in self_tags:
-                if tag in board[(row * size) + i].tags:
+                if tag in board[(i * size) + row].tags:
                     synergy += 1
 
         # Iterate col
@@ -99,7 +103,7 @@ class CCommV1(BingoGeneratorV2):
             if i == row:
                 continue
             for tag in self_tags:
-                if tag in board[(i * size) + col].tags:
+                if tag in board[(col * size) + i].tags:
                     synergy += 1
 
         # Iterate TLBR
@@ -114,7 +118,7 @@ class CCommV1(BingoGeneratorV2):
         # Iterate TRBL
         if row == (size - col - 1):
             for i in range(size):
-                if i == row:
+                if i == col:
                     continue
                 for tag in self_tags:
                     if tag in board[(i * size) + size - i - 1].tags:
